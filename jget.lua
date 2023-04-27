@@ -2,7 +2,7 @@ do --settings block
     settings.define("JGET.outdir", { description = "Directory packages are installed into", default = "./packages/" })
     settings.define("JGET.endpoint",
         { description = "Location of JGET webserver. Uses master server as default",
-            default = "https://jget.trevor.business/" })
+            default = "http://localhost:3000/api/package/" })
 end
 
 local endpoint = settings.get("JGET.endpoint")
@@ -62,25 +62,45 @@ local function get(arg)
     print("getting package " .. package)
 
 
-    -- TODO this need to be updated
-    local target_url = endpoint .. "api/get/" .. package .. "/"
+    local target_url = endpoint .. package
 
-    local response, reason, _ = http.get {
+    local response, reason, failRes = http.get {
         url = target_url, method = "GET",
     }
 
     if not response then
-        print("error: " .. reason)
+        if not failRes then
+            print("error: " .. reason)
+            return
+        end
+
+        local data = textutils.unserialiseJSON(failRes.readAll())
+
+        print("error: " .. data.message)
+        return
+    end
+
+
+    if response.getResponseCode() ~= 200 then
+        print("error: code ".. response.getResponseCode())  
         return
     end
 
     local data = textutils.unserialiseJSON(response.readAll())
+
+    if not data then
+        print("error")
+    end
+
+
     local files = textutils.unserialiseJSON(data["files"])
 
     ensure(outdir)
 
     local install_dir = fs.combine(outdir, package)
     install(install_dir, files)
+    
+    print("success!")
 end
 
 local function init(args)
@@ -144,11 +164,13 @@ local function put(args)
 
     --make put request
     -- Todo update this
-    local target_url = endpoint .. "api/put/" .. data.name .. "/"
+    local target_url = endpoint .. package_name
+
+    print(target_url)
 
     local args = {
-        url = target_url, body = json_data, method = "POST",
-        headers = { ["Authorization"] = "Token " .. token, ["Content-Type"] = "application/json" }
+        url = target_url, body = json_data, method = "PUT",
+        headers = { ["Content-Type"] = "application/json" }
     }
     local response, reason, _ = http.post(args)
 
@@ -250,8 +272,6 @@ local commands = {
 
 
 local function main(args)
-    setup()
-
     local command = arg[1]
     if not command then
         print("")
