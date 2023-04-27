@@ -2,7 +2,7 @@ do --settings block
     settings.define("JGET.outdir", { description = "Directory packages are installed into", default = "./packages/" })
     settings.define("JGET.endpoint",
         { description = "Location of JGET webserver. Uses master server as default",
-            default = "http://localhost:3000/api/package/" })
+            default = "https://jget.trevor.business/api/package/" })
 end
 
 local endpoint = settings.get("JGET.endpoint")
