@@ -60,4 +60,7 @@ export const packageRouter = createTRPCRouter({
         select: { name: true },
       });
     }),
+  count: publicProcedure.query(({ ctx }) => {
+    return ctx.prisma.package.count();
+  }),
 });

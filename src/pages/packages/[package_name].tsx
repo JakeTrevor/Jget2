@@ -1,9 +1,11 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import { api } from "~/utils/api";
+import { useRouter } from "next/router";
 
-const Home: NextPage = () => {
-  let { data, isLoading, error } = api.package.count.useQuery();
+const Packages: NextPage = () => {
+  const router = useRouter();
+  const { package_name } = router.query;
+
   return (
     <>
       <Head>
@@ -13,12 +15,12 @@ const Home: NextPage = () => {
       </Head>
       <main>
         <section className="mt-10 flex w-full flex-row justify-around">
-          <p className="font-sans">Package Manager for Computercraft</p>
-          <h3>{isLoading ? <></> : <>{data} Packages</>}</h3>
+          <p className="font-sans">View a specific package.</p>
+          <h2>{package_name}</h2>
         </section>
       </main>
     </>
   );
 };
 
-export default Home;
+export default Packages;
