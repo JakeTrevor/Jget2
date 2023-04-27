@@ -4,6 +4,9 @@ import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
   let { data, isLoading, error } = api.package.count.useQuery();
+
+  let pkg_count = data || 0;
+
   return (
     <>
       <Head>
@@ -11,10 +14,41 @@ const Home: NextPage = () => {
         <meta name="description" content="JGET Package Manager" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <section className="mt-10 flex w-full flex-row justify-around">
-          <p className="font-sans">Package Manager for Computercraft</p>
-          <h3>{isLoading ? <></> : <>{data} Packages</>}</h3>
+      <main className="flex flex-col">
+        <section className="hero min-h-screen bg-base-200">
+          <div className="hero-content flex-col lg:flex-row-reverse">
+            <div className="rounded-box flex flex-col bg-neutral p-2 font-title text-neutral-content">
+              <span className="countdown font-title text-5xl">
+                {/* @ts-ignore */}
+                <span style={{ "--value": pkg_count }}></span>
+              </span>
+              Packages
+            </div>
+            <div>
+              <h1 className="text-4xl font-bold">
+                A Package Manager for Computercraft
+              </h1>
+              <p>Jake Trevor</p>
+            </div>
+          </div>
+        </section>
+
+        <section className="my-10 w-3/4 self-center text-xl">
+          <h3 className="divider text-3xl font-bold">Why use JGET?</h3>
+          <div className="grid grid-cols-1 lg:grid-cols-2">
+            <div className="inline">
+              <h4 className="inline font-title">Move Code </h4>seamlessly
+              between computers
+            </div>
+            <span>
+              <h4 className="inline font-title">Collaborate </h4> with others
+            </span>
+            <span>
+              <h4 className="inline font-title">Reuse </h4>
+              packages and modules
+            </span>
+            <span></span>
+          </div>
         </section>
       </main>
     </>

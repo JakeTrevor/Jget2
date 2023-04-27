@@ -3,16 +3,20 @@ import localFont from "next/font/local";
 
 import { api } from "~/utils/api";
 import "~/styles/globals.css";
-import Header from "~/components/header";
+import Layout from "~/components/layout";
 
-// Font files can be colocated inside of `pages`
-const title = localFont({ src: "./font/title.ttf" });
+const title = localFont({
+  src: "./font/title.ttf",
+  variable: "--font-title",
+  display: "swap",
+});
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
-    <main className={title.className}>
-      <Header />
-      <Component {...pageProps} />
+    <main className={title.variable} data-theme="lofi">
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </main>
   );
 };
