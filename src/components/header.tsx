@@ -5,7 +5,7 @@ export default () => {
     <header className="navbar sticky top-0 bg-base-100">
       <Link
         href="/"
-        className="debug btn-ghost btn flex items-end pb-1 font-title  normal-case"
+        className="btn-ghost btn flex items-end pb-1 font-title  normal-case"
       >
         <h1 className="text-4xl">JGET</h1>
       </Link>

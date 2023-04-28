@@ -11,7 +11,7 @@ export const packageRouter = createTRPCRouter({
         select: { files: true },
       });
 
-      return JSON.parse(data.files);
+      return JSON.parse(data.files) as Directory;
     }),
   getByName: publicProcedure
     .meta({
