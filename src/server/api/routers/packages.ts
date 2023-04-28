@@ -3,6 +3,16 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const packageRouter = createTRPCRouter({
+  getFiles: publicProcedure
+    .input(z.string())
+    .query(async ({ ctx, input: name }) => {
+      const data = await ctx.prisma.package.findUniqueOrThrow({
+        where: { name },
+        select: { files: true },
+      });
+
+      return JSON.parse(data.files);
+    }),
   getByName: publicProcedure
     .meta({
       openapi: {
