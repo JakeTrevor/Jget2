@@ -1,4 +1,5 @@
 import { type Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
 export default {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
@@ -9,5 +10,16 @@ export default {
       },
     },
   },
-  plugins: [require("@tailwindcss/typography"), require("daisyui")],
+  plugins: [
+    require("@tailwindcss/typography"),
+    require("daisyui"),
+    plugin(function ({ addComponents }) {
+      addComponents({
+        ".debug": {
+          outline: "2px solid;",
+          "outline-color": "hsl(14, 80%, 50%);",
+        },
+      });
+    }),
+  ],
 } satisfies Config;
