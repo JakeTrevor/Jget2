@@ -2,7 +2,9 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+
 import CopyButton from "~/components/CopyButton";
+import FileBrowser from "~/components/fileBrowser";
 import { api } from "~/utils/api";
 
 const Packages: NextPage = () => {
@@ -15,7 +17,7 @@ const Packages: NextPage = () => {
 
   useEffect(() => {
     console.log(data);
-  }, data);
+  }, [data]);
 
   return (
     <>
@@ -24,9 +26,10 @@ const Packages: NextPage = () => {
         <meta name="description" content="JGET Package Manager" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-screen flex-col bg-base-200">
-        <section className="my-10 w-3/4 self-center">
+      <main className="flex min-h-screen flex-col items-center bg-base-200">
+        <section className="my-10 w-3/4">
           <h2 className="text-3xl font-bold">{package_name}</h2>
+          <div className="divider" />
           <div className="flex flex-row justify-between">
             <div></div>
             <div>
@@ -40,6 +43,7 @@ const Packages: NextPage = () => {
             </div>
           </div>
         </section>
+        {data && <FileBrowser data={data} pointer={["Split.lua"]} />}
       </main>
     </>
   );
