@@ -1,9 +1,11 @@
 import { FC } from "react";
 import FileDisplay from "./FileDisplay";
+import FileList from "./FileList";
 
 interface props {
   data: Directory;
   pointer: string[];
+  package_name: string;
 }
 
 function getDir(data: Directory, pointer: string[]) {
@@ -19,15 +21,16 @@ function getDir(data: Directory, pointer: string[]) {
   );
 }
 
-let FileBrowser: FC<props> = ({ data, pointer }) => {
+let FileBrowser: FC<props> = ({ package_name, data, pointer }) => {
   let result = getDir(data, pointer);
 
   return (
     <section className="w-3/4">
-      {
-        typeof result === "string" ? <FileDisplay data={result} /> : <></>
-        // <FileList/>
-      }
+      {typeof result === "string" ? (
+        <FileDisplay data={result} />
+      ) : (
+        <FileList package_name={package_name} data={result} />
+      )}
     </section>
   );
 };

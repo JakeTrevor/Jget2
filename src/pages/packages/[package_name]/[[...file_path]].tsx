@@ -9,14 +9,18 @@ import { api } from "~/utils/api";
 
 const Packages: NextPage = () => {
   const router = useRouter();
-  const { package_name } = router.query;
+  let { package_name, file_path } = router.query;
 
   if (typeof package_name !== "string") return <>invalid package name</>;
+
+  file_path ||= [];
+  if (typeof file_path === "string") file_path = [file_path];
 
   const { data } = api.package.getFiles.useQuery(package_name);
 
   useEffect(() => {
     console.log(data);
+    console.log(file_path);
   }, [data]);
 
   return (
@@ -43,7 +47,13 @@ const Packages: NextPage = () => {
             </div>
           </div>
         </section>
-        {data && <FileBrowser data={data} pointer={["Split.lua"]} />}
+        {data && (
+          <FileBrowser
+            package_name={package_name}
+            data={data}
+            pointer={file_path}
+          />
+        )}
       </main>
     </>
   );
