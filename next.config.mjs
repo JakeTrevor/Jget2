@@ -19,8 +19,8 @@ const config = {
     defaultLocale: "en",
   },
 
-  //
   webpack(config) {
+    // @ts-ignore
     const fileLoaderRule = config.module.rules.find((rule) =>
       rule.test?.test?.(".svg")
     );
