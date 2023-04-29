@@ -1,6 +1,7 @@
 import { FC } from "react";
 import FileDisplay from "./FileDisplay";
 import FileList from "./FileList";
+import Link from "next/link";
 
 interface props {
   data: Directory;
@@ -24,8 +25,24 @@ function getDir(data: Directory, pointer: string[]) {
 let FileBrowser: FC<props> = ({ package_name, data, pointer }) => {
   let result = getDir(data, pointer);
 
+  let crumbs = [package_name, ...pointer];
+
   return (
     <section className="w-3/4">
+      <div className="breadcrumbs text-sm">
+        <ul>
+          {crumbs.map((e, i, arr) => {
+            if (i === arr.length - 1) return <li>{e}</li>;
+            let path = arr.slice(0, i + 1).join("/");
+
+            return (
+              <li>
+                <Link href={`/packages/${path}`}>{e}</Link>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
       {typeof result === "string" ? (
         <FileDisplay data={result} />
       ) : (
