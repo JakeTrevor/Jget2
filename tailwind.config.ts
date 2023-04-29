@@ -9,17 +9,27 @@ export default {
         title: ["var(--font-title)"],
       },
     },
+    hljs: {
+      theme: "atom-one-dark",
+    },
   },
   plugins: [
     require("@tailwindcss/typography"),
     require("daisyui"),
-    plugin(function ({ addComponents }) {
-      addComponents({
+    plugin(function ({ addUtilities, addVariant }) {
+      addUtilities({
         ".debug": {
           outline: "2px solid;",
           "outline-color": "hsl(14, 80%, 50%);",
         },
       });
+      addVariant("children", "&>*");
     }),
+    require("tailwind-highlightjs"),
+  ],
+  safelist: [
+    {
+      pattern: /hljs+/,
+    },
   ],
 } satisfies Config;
