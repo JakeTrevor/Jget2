@@ -1,4 +1,5 @@
 import { FC, useEffect, useRef, useState } from "react";
+import Loading from "../Loading";
 
 interface props {
   data: string;
@@ -28,7 +29,7 @@ let FileDisplay: FC<props> = ({ data }) => {
           </code>
         </pre>
       </div>
-      {!hljs && <div>loading...</div>}
+      {!hljs && <Loading />}
     </>
   );
 };

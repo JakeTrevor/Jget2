@@ -2,6 +2,7 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Loading from "~/components/Loading";
 import { api } from "~/utils/api";
 
 const Packages: NextPage = () => {
@@ -30,7 +31,7 @@ const Packages: NextPage = () => {
       <main className="mt-10 flex w-full flex-col items-center justify-around">
         <p className="font-sans">Explore Packages</p>
         {isLoading ? (
-          <>Loading...</>
+          <Loading />
         ) : (
           <ul className="menu rounded-box w-1/2 bg-base-100 p-2">
             {data.map((e) => (
