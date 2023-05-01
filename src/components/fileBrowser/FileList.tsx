@@ -6,10 +6,11 @@ import Folder from "~/icons/folder.svg";
 
 interface props {
   data: Directory;
+  pointer: string[];
   package_name: string;
 }
 
-let FileList: FC<props> = ({ package_name, data }) => {
+let FileList: FC<props> = ({ package_name, pointer, data }) => {
   let keys = Object.keys(data)
     .sort()
     .sort((a, b) => {
@@ -42,7 +43,7 @@ let FileList: FC<props> = ({ package_name, data }) => {
           </div>
           <Link
             className="link-hover link col-span-2 pl-2 sm:col-span-6 md:col-span-5 lg:col-span-8 xl:col-span-11"
-            href={`/package/${package_name}/${key}`}
+            href={`/package/${package_name}/${pointer.join("/")}/${key}`}
           >
             {key}
           </Link>

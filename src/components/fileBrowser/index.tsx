@@ -73,7 +73,7 @@ let FileBrowser: FC<props> = ({ package_name, data, pointer }) => {
       {typeof result === "string" ? (
         <FileDisplay data={result} />
       ) : (
-        <FileList package_name={package_name} data={result} />
+        <FileList package_name={package_name} pointer={pointer} data={result} />
       )}
     </section>
   );
