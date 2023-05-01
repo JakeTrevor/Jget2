@@ -3,7 +3,7 @@ import Head from "next/head";
 import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
-  let { data, isLoading, error } = api.package.count.useQuery();
+  let { data } = api.package.count.useQuery();
 
   let pkg_count = data || 0;
 
