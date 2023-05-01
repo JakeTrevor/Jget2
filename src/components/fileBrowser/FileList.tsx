@@ -24,20 +24,28 @@ let FileList: FC<props> = ({ package_name, data }) => {
   });
 
   return (
-    <ul>
-      {keys.map((key) => (
-        <li>
-          <Link href={`/packages/${package_name}/${key}`}>
-            {typeof data[key] === "string" ? (
-              <File width={15} />
-            ) : (
-              <Folder width={15} />
-            )}
-            {key}
-          </Link>
-        </li>
-      ))}
-    </ul>
+    <table className="table w-full">
+      <thead>
+        <th>Type</th>
+        <th>File Name</th>
+      </thead>
+      <tbody>
+        {keys.map((key) => (
+          <tr>
+            <th className="w-1">
+              {typeof data[key] === "string" ? (
+                <File width={15} />
+              ) : (
+                <Folder width={15} />
+              )}
+            </th>
+            <td>
+              <Link href={`/packages/${package_name}/${key}`}>{key}</Link>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 };
 
