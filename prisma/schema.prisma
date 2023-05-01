@@ -15,4 +15,5 @@ model Package {
     ID String @id @default(cuid())
     name String @unique
     files String @db.LongText
+    downloads Int @default(0)
 }
