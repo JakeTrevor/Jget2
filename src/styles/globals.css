@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.media-debug {
+  @apply bg-lime-300 sm:bg-orange-400 md:bg-red-500 lg:bg-purple-500 xl:bg-emerald-400;
+}

@@ -2,10 +2,10 @@ import Link from "next/link";
 
 export default () => {
   return (
-    <header className="navbar sticky top-0 bg-base-100">
+    <header className="navbar sticky top-0 z-10 bg-base-100 pb-3">
       <Link
         href="/"
-        className="btn-ghost btn flex items-end pb-1 font-title  normal-case"
+        className="btn-ghost btn flex items-end pb-1 font-title normal-case text-primary"
       >
         <h1 className="text-4xl">JGET</h1>
       </Link>

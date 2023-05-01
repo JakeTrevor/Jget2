@@ -40,7 +40,7 @@ let FileList: FC<props> = ({ package_name, data }) => {
               )}
             </th>
             <td>
-              <Link href={`/packages/${package_name}/${key}`}>{key}</Link>
+              <Link href={`/package/${package_name}/${key}`}>{key}</Link>
             </td>
           </tr>
         ))}

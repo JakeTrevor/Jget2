@@ -37,7 +37,7 @@ let FileBrowser: FC<props> = ({ package_name, data, pointer }) => {
 
             return (
               <li>
-                <Link href={`/packages/${path}`}>{e}</Link>
+                <Link href={`/package/${path}`}>{e}</Link>
               </li>
             );
           })}

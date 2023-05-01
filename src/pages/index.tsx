@@ -34,20 +34,28 @@ const Home: NextPage = () => {
         </section>
 
         <section className="my-10 w-3/4 self-center text-xl">
-          <h3 className="divider text-3xl font-bold">Why use JGET?</h3>
-          <div className="grid grid-cols-1 lg:grid-cols-2">
+          <h3 className="divider mb-8 text-3xl font-bold">Why use JGET?</h3>
+          <div className="grid grid-cols-1 gap-x-1 gap-y-3 lg:grid-cols-2">
             <div className="inline">
-              <h4 className="inline font-title">Move Code </h4>seamlessly
-              between computers
+              <h4 className="inline font-title text-sky-500 lg:text-lime-500">
+                Move Code{" "}
+              </h4>
+              seamlessly between computers
             </div>
             <span>
-              <h4 className="inline font-title">Collaborate </h4> with others
+              <h4 className="inline font-title text-lime-500">Collaborate </h4>{" "}
+              with others
             </span>
             <span>
-              <h4 className="inline font-title">Reuse </h4>
+              <h4 className="inline font-title text-yellow-800">Reuse </h4>
               packages and modules
             </span>
-            <span></span>
+            <span>
+              <h4 className="inline font-title text-slate-500 lg:text-yellow-800">
+                Access{" "}
+              </h4>
+              useful modules written by others
+            </span>
           </div>
         </section>
       </main>

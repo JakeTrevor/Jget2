@@ -24,7 +24,9 @@ let FileDisplay: FC<props> = ({ data }) => {
     <>
       <div className={`${hljs ? "" : "hidden"}`}>
         <pre>
-          <code ref={codeBlock}>{data}</code>
+          <code className="language-lua" ref={codeBlock}>
+            {data}
+          </code>
         </pre>
       </div>
       {!hljs && <div>loading...</div>}
