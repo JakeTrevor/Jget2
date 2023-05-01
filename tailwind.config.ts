@@ -10,7 +10,38 @@ export default {
       },
     },
     hljs: {
-      theme: "atom-one-dark",
+      custom: {
+        base: {
+          background: "#1a1919",
+          color: "#ffffff",
+        },
+        general: {
+          comment: {
+            color: "#64748b",
+          },
+          title: {
+            color: "#a7956e",
+          },
+          params: {
+            color: "#e3e3b5",
+          },
+          string: {
+            color: "#22c55e",
+          },
+          number: {
+            color: "#f89b7a",
+          },
+          keyword: {
+            color: "#8207e7",
+            fontStyle: "italic",
+          },
+          built_in: {
+            color: "#0ea5e9",
+            fontStyle: "italic",
+          },
+          // other general styles
+        },
+      },
     },
   },
   plugins: [
