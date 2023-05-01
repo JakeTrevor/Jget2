@@ -13,7 +13,7 @@ const title = localFont({
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
-    <main className={title.variable} data-theme="lofi">
+    <main className={title.variable}>
       <Layout>
         <Component {...pageProps} />
       </Layout>

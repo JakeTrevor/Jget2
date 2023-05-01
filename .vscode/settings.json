@@ -1,5 +1,5 @@
 {
-  "cSpell.words": ["JGET"],
+  "cSpell.words": ["hljs", "JGET", "nextjs", "openapi"],
   "material-icon-theme.folders.associations": {
     "fileBrowser": "dist",
     "trpc": "routes"

@@ -1,4 +1,3 @@
-import { HLJSApi } from "highlight.js";
 import { FC, useEffect, useRef, useState } from "react";
 
 interface props {

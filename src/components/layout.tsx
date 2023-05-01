@@ -1,4 +1,3 @@
-import localFont from "next/font/local";
 import type { FC, ReactNode } from "react";
 import Header from "./header";
 
