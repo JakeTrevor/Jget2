@@ -17,12 +17,9 @@ const Packages: NextPage = () => {
   file_path ||= [];
   if (typeof file_path === "string") file_path = [file_path];
 
-  const { data: files } = api.package.getFiles.useQuery(package_name);
+  const { data } = api.package.getByName.useQuery(package_name);
 
-  const { data: download_data } =
-    api.package.getDownloads.useQuery(package_name);
-
-  const download_count = download_data?.downloads || 0;
+  const download_count = data?.downloads || 0;
 
   return (
     <>
@@ -56,10 +53,10 @@ const Packages: NextPage = () => {
             </div>
           </div>
         </section>
-        {files && (
+        {data?.files && (
           <FileBrowser
             package_name={package_name}
-            data={files}
+            data={data.files}
             pointer={file_path}
           />
         )}
