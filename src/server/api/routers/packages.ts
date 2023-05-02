@@ -2,6 +2,8 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
+const PAGE_SIZE = 10;
+
 export const packageRouter = createTRPCRouter({
   count: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.package.count();
@@ -15,15 +17,20 @@ export const packageRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input: { search, page } }) => {
-      const PAGE_SIZE = 10;
-
       let clause = search ? { name: { contains: search } } : {};
 
-      return await ctx.prisma.package.findMany({
+      let count = await ctx.prisma.package.count({ where: clause });
+
+      let packages = await ctx.prisma.package.findMany({
         take: PAGE_SIZE,
         skip: (page - 1) * PAGE_SIZE,
         where: clause,
       });
+
+      return {
+        num_pages: Math.ceil(count / PAGE_SIZE),
+        packages,
+      };
     }),
 
   getByName: publicProcedure
