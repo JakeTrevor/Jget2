@@ -36,4 +36,13 @@ export const packageRouter = createTRPCRouter({
 
       return JSON.parse(data.files) as Directory;
     }),
+
+  getDownloads: publicProcedure
+    .input(z.string())
+    .query(async ({ ctx, input: name }) => {
+      return await ctx.prisma.package.findUniqueOrThrow({
+        where: { name },
+        select: { downloads: true },
+      });
+    }),
 });

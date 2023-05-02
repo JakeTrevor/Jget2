@@ -21,10 +21,15 @@ export const restRouter = createTRPCRouter({
         files: z.string(),
       })
     )
-    .query(({ ctx, input: { name } }) => {
-      return ctx.prisma.package.findUniqueOrThrow({
+    .query(async ({ ctx, input: { name } }) => {
+      return await ctx.prisma.package.update({
         where: {
           name: name,
+        },
+        data: {
+          downloads: {
+            increment: 1,
+          },
         },
         select: {
           name: true,

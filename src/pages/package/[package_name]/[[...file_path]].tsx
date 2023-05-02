@@ -1,7 +1,8 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+
+import Downloads from "~/icons/downloads.svg";
 
 import CopyButton from "~/components/CopyButton";
 import FileBrowser from "~/components/fileBrowser";
@@ -11,17 +12,17 @@ const Packages: NextPage = () => {
   const router = useRouter();
   let { package_name, file_path } = router.query;
 
-  if (typeof package_name !== "string") return <>invalid package name</>;
+  if (typeof package_name !== "string") return <>invalid package name</>; //theoretical error
 
   file_path ||= [];
   if (typeof file_path === "string") file_path = [file_path];
 
-  const { data } = api.package.getFiles.useQuery(package_name);
+  const { data: files } = api.package.getFiles.useQuery(package_name);
 
-  useEffect(() => {
-    console.log(data);
-    console.log(file_path);
-  }, [data]);
+  const { data: download_data } =
+    api.package.getDownloads.useQuery(package_name);
+
+  const download_count = download_data?.downloads || 0;
 
   return (
     <>
@@ -35,7 +36,15 @@ const Packages: NextPage = () => {
           <h2 className="text-3xl font-bold">{package_name}</h2>
           <div className="divider" />
           <div className="flex flex-row justify-between">
-            <div></div>
+            <div className="stats">
+              <div className="stat">
+                <div className="stat-figure text-primary">
+                  <Downloads width={30} />
+                </div>
+                <div className="stat-title">Downloads</div>
+                <div className="stat-value text-primary">{download_count}</div>
+              </div>
+            </div>
             <div>
               <h4 className="font-semibold italic text-accent">
                 Install this package:
@@ -47,10 +56,10 @@ const Packages: NextPage = () => {
             </div>
           </div>
         </section>
-        {data && (
+        {files && (
           <FileBrowser
             package_name={package_name}
-            data={data}
+            data={files}
             pointer={file_path}
           />
         )}
