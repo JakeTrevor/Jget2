@@ -16,4 +16,8 @@ model Package {
     name String @unique
     files String @db.LongText
     downloads Int @default(0)
+
+    // new fields:
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now())
 }

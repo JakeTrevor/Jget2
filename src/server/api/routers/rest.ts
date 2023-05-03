@@ -3,7 +3,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const restRouter = createTRPCRouter({
-  getByName: publicProcedure
+  download: publicProcedure
     .meta({
       openapi: {
         method: "GET",
@@ -62,7 +62,7 @@ export const restRouter = createTRPCRouter({
           name: input.name,
         },
         create: input,
-        update: input,
+        update: { ...input, updatedAt: new Date(Date.now()) },
         select: { name: true },
       });
     }),
