@@ -30,7 +30,7 @@ const Packages: NextPage = () => {
         <meta name="description" content="JGET Package Manager" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="mt-10 flex min-h-screen w-full flex-col items-center justify-around bg-base-200">
+      <main className="flex min-h-screen w-full flex-col items-center justify-around bg-base-200">
         <h1 className="font-title">Explore Packages</h1>
         {isLoading ? (
           <Loading />

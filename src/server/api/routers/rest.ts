@@ -22,6 +22,14 @@ export const restRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input: { name } }) => {
+      let record = await ctx.prisma.package.findUnique({
+        where: {
+          name: name,
+        },
+      });
+
+      if (!record) throw new Error("No such package");
+
       return await ctx.prisma.package.update({
         where: {
           name: name,

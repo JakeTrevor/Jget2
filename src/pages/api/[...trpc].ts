@@ -12,9 +12,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   return createOpenApiNextHandler({
     router: appRouter,
     createContext: createTRPCContext,
-    onError: () => {
-      return "hello";
-    },
   })(req, res);
 };
 
