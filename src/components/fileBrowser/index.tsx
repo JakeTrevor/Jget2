@@ -71,7 +71,7 @@ let FileBrowser: FC<props> = ({ package_name, data, pointer }) => {
       </div>
       <div className="divider my-1 -mb-3 before:bg-zinc-700 after:bg-zinc-700" />
       {typeof result === "string" ? (
-        <FileDisplay data={result} />
+        <FileDisplay data={result} file_name={pointer.at(-1) || ""} />
       ) : (
         <FileList package_name={package_name} pointer={pointer} data={result} />
       )}

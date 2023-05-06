@@ -22,6 +22,7 @@
     "nextjs-cors": "^2.1.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-markdown": "^8.0.7",
     "superjson": "1.12.2",
     "tailwind-highlightjs": "^2.0.1",
     "trpc-openapi": "^1.1.2",

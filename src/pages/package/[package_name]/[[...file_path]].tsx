@@ -61,7 +61,7 @@ const Packages: NextPage = () => {
                 Install this package:
               </h4>
               <pre className="rounded-md bg-secondary p-3 text-emerald-500">
-                $ <code className="text-white">jget get {package_name} </code>
+                $ <span className="text-white">jget get {package_name} </span>
                 <CopyButton text={`jget get ${package_name}`} />
               </pre>
             </div>

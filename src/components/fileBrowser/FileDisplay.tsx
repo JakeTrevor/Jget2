@@ -1,37 +1,48 @@
 import { FC, useEffect, useRef, useState } from "react";
 import Loading from "../Loading";
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 
 interface props {
   data: string;
+  file_name: string;
 }
 
-let FileDisplay: FC<props> = ({ data }) => {
+let FileDisplay: FC<props> = ({ data, file_name }) => {
   let [hljs, setHljs] = useState(false);
-
-  let codeBlock = useRef<HTMLElement>(null);
-
-  useEffect(() => {}, []);
 
   useEffect(() => {
     import("highlight.js").then((hljs) => {
       setHljs(true);
-      if (!codeBlock.current) return;
-      hljs.default.highlightElement(codeBlock.current);
+      hljs.default.highlightAll();
     });
-  }, [codeBlock]);
+  }, []);
+
+  let lang = getExtension(file_name);
 
   return (
     <>
-      <div className={`${hljs ? "" : "hidden"}`}>
-        <pre>
-          <code className="language-lua" ref={codeBlock}>
-            {data}
-          </code>
-        </pre>
-      </div>
-      {!hljs && <Loading />}
+      {lang === "md" ? (
+        <div className="prose mt-5 max-w-full rounded bg-base-200 p-2">
+          <ReactMarkdown>{data}</ReactMarkdown>
+        </div>
+      ) : (
+        <>
+          <div className={`${hljs ? "" : "hidden"}`}>
+            <pre>
+              <code className={`language-${lang}`}>{data}</code>
+            </pre>
+          </div>
+          {!hljs && <Loading />}
+        </>
+      )}
     </>
   );
 };
+
+function getExtension(file_name: string) {
+  if (!file_name.includes(".")) return "lua";
+
+  return file_name.split(".").at(-1) || "lua";
+}
 
 export default FileDisplay;
