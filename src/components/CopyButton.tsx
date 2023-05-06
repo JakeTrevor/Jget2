@@ -1,5 +1,6 @@
 import { FC, useState } from "react";
 import Clipboard from "~/icons/clipboard.svg";
+import Tick from "~/icons/tick.svg";
 
 interface props {
   text: string;
@@ -23,7 +24,11 @@ let CopyButton: FC<props> = ({ text }) => {
         }, 3000);
       }}
     >
-      <Clipboard width="15" className="inline -translate-y-1 " />
+      {recent ? (
+        <Tick width="15" className="inline" />
+      ) : (
+        <Clipboard width="15" className="inline -translate-y-1 " />
+      )}
     </button>
   );
 };
