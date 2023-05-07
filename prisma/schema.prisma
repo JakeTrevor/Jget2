@@ -2,22 +2,36 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
-  url = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
 model Package {
-    ID String @id @default(cuid())
-    name String @unique
-    files String @db.LongText
-    downloads Int @default(0)
+  ID        String @id @default(cuid())
+  name      String @unique
+  files     String @db.LongText
+  downloads Int    @default(0)
 
-    // new fields:
-    createdAt DateTime @default(now())
-    updatedAt DateTime @default(now())
+  // new fields:
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @default(now())
+  dependents   Dependency[] @relation(name: "dependsOn")
+  dependencies Dependency[] @relation(name: "dependencyFor")
+}
+
+model Dependency {
+  ID        String  @id @default(cuid())
+  for       Package @relation(name: "dependencyFor", fields: [packageID], references: [ID])
+  packageID String
+
+  dependsOn Package @relation(name: "dependsOn", fields: [depID], references: [ID])
+  depID     String
+
+  @@index([packageID])
+  @@index([depID])
 }
