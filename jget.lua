@@ -1,8 +1,10 @@
 do --settings block
     settings.define("JGET.outdir", { description = "Directory packages are installed into", default = "./packages/" })
     settings.define("JGET.endpoint",
-        { description = "Location of JGET webserver. Uses master server as default",
-            default = "https://jget.trevor.business/api/package/" })
+        {
+            description = "Location of JGET webserver. Uses master server as default",
+            default = "https://jget.trevor.business/api/package/"
+        })
 end
 
 local endpoint = settings.get("JGET.endpoint")
@@ -29,12 +31,10 @@ local function install(dirname, files)
             local file = fs.open(file_path, "w")
             file.write(value)
             file.close()
-
         else
             --its a directory
             install(file_path, value)
         end
-
     end
 end
 
@@ -47,8 +47,16 @@ local function list()
         print("no packages installed")
         return
     end
+
+    local pkgs = get_installed_packages()
+
+    if (#pkgs == 0) then
+        print("no packages installed")
+        return
+    end
+
     print("installed packages:")
-    print(textutils.serialise(get_installed_packages()))
+    print(textutils.serialise())
 end
 
 local function get(arg)
@@ -82,7 +90,7 @@ local function get(arg)
 
 
     if response.getResponseCode() ~= 200 then
-        print("error: code ".. response.getResponseCode())  
+        print("error: code " .. response.getResponseCode())
         return
     end
 
@@ -99,7 +107,7 @@ local function get(arg)
 
     local install_dir = fs.combine(outdir, package)
     install(install_dir, files)
-    
+
     print("success!")
 end
 
@@ -169,7 +177,9 @@ local function put(args)
     print(target_url)
 
     local args = {
-        url = target_url, body = json_data, method = "PUT",
+        url = target_url,
+        body = json_data,
+        method = "PUT",
         headers = { ["Content-Type"] = "application/json" }
     }
     local response, reason, _ = http.post(args)
@@ -184,7 +194,6 @@ local function put(args)
     else
         print("Error: code " .. response.getResponseCode())
     end
-
 end
 
 local help_dict = {
@@ -194,7 +203,7 @@ list
 
 useage:
 'jget list'
-]]   ,
+]],
     ["get"] = [[
 get
 - requests the specified package from the JGET repo
@@ -202,29 +211,29 @@ get
 
 useage:
 'jget get <package name>'
-]]   ,
+]],
     ["put"] = [[
 put
 - specify a package to to be uploaded
-- looks for the package files in `<outdir>/<package name>/` 
+- looks for the package files in `<outdir>/<package name>/`
     - i.e. `packages/<package name>/`
 
 - Package is uploaded to JGET repo
 
-- This is an "upsert" operation; 
+- This is an "upsert" operation;
 - if the package already exists on the repo then the package will be updated
 
     useage:
 'jget put <package name>'
-]]   ,
+]],
     ["init"] = [[
 init
-- creates a directory in the `/packages/` folder 
-- the directory name is a 
+- creates a directory in the `/packages/` folder
+- the directory name is a
 
     useage:
 'jget init <package name>'
-]]   ,
+]],
     ["help"] = [[
 help
 - you are already using this command!
@@ -235,7 +244,7 @@ https://jget.trevor.business/get_jget/
 
 useage:
 'jget help <command>'
-]]   ,
+]],
 }
 
 local function jget_help(arg)

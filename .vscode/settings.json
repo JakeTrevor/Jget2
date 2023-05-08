@@ -3,5 +3,13 @@
   "material-icon-theme.folders.associations": {
     "fileBrowser": "dist",
     "trpc": "routes"
-  }
+  },
+  "Lua.diagnostics.globals": [
+    "fs",
+    "textutils",
+    "http",
+    "write",
+    "shell",
+    "settings"
+  ]
 }
