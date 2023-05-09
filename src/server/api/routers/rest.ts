@@ -19,6 +19,7 @@ export const restRouter = createTRPCRouter({
       z.object({
         name: z.string(),
         files: z.string(),
+        dependencies: z.array(z.string()),
       })
     )
     .query(async ({ ctx, input: { name } }) => {
@@ -30,7 +31,7 @@ export const restRouter = createTRPCRouter({
 
       if (!record) throw new Error("No such package");
 
-      return await ctx.prisma.package.update({
+      let pkg = await ctx.prisma.package.update({
         where: {
           name: name,
         },
@@ -42,8 +43,15 @@ export const restRouter = createTRPCRouter({
         select: {
           name: true,
           files: true,
+          dependencies: {
+            select: { dependsOn: { select: { name: true } } },
+          },
         },
       });
+      return {
+        ...pkg,
+        dependencies: pkg.dependencies.map((e) => e.dependsOn.name),
+      };
     }),
 
   upload: publicProcedure

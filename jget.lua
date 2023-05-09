@@ -59,14 +59,7 @@ local function list()
     print(textutils.serialise())
 end
 
-local function get(arg)
-    local package = arg[2]
-
-    if package == nil then
-        print("Please provide a package to install")
-        return
-    end
-
+local function fetch_pkg(name)
     print("getting package " .. package)
 
 
@@ -79,19 +72,19 @@ local function get(arg)
     if not response then
         if not failRes then
             print("error: " .. reason)
-            return
+            return false
         end
 
         local data = textutils.unserialiseJSON(failRes.readAll())
 
         print("error: " .. data.message)
-        return
+        return false
     end
 
 
     if response.getResponseCode() ~= 200 then
         print("error: code " .. response.getResponseCode())
-        return
+        return false
     end
 
     local data = textutils.unserialiseJSON(response.readAll())
@@ -108,7 +101,25 @@ local function get(arg)
     local install_dir = fs.combine(outdir, package)
     install(install_dir, files)
 
-    print("success!")
+    local dependencies = data["dependencies"]
+    for _, dep in ipairs(dependencies) do
+        fetch_pkg(dep)
+    end
+
+    return true
+end
+
+local function get(arg)
+    local package = arg[2]
+
+    if package == nil then
+        print("Please provide a package to install")
+        return
+    end
+
+    if fetch_pkg(package) then
+        print("success!")
+    end
 end
 
 local function init(args)
@@ -145,6 +156,24 @@ local function get_files(path)
     return data
 end
 
+local function get_dependencies(path)
+    local dep_file = shell.resolve(path .. "/DEPENDENCIES")
+    local dep_arr = {}
+    local head = 1
+
+    if (~fs.exists(dep_file)) then return dep_arr end
+
+    local handle = fs.open(dep_file, "r")
+    local next_line = handle.readLine();
+    while (next_line) do
+        dep_arr[head] = next_line
+        head = head + 1;
+        next_line = handle.readLine()
+    end
+
+    return dep_arr
+end
+
 local function put(args)
     local package_name = args[2]
 
@@ -165,13 +194,13 @@ local function put(args)
     local current_directory = shell.resolve("./packages/" .. package_name)
 
     local files = get_files(current_directory)
+    local dependencies = get_dependencies(current_directory)
 
     data["files"] = textutils.serialiseJSON(files)
+    data["dependencies"] = textutils.serialiseJSON(dependencies)
 
-    json_data = textutils.serialiseJSON(data)
+    local json_data = textutils.serialiseJSON(data)
 
-    --make put request
-    -- Todo update this
     local target_url = endpoint .. package_name
 
     print(target_url)
@@ -247,6 +276,7 @@ useage:
 ]],
 }
 
+---@param arg string[]
 local function jget_help(arg)
     local command = arg[2]
 
