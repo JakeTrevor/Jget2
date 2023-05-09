@@ -100,7 +100,7 @@ export const restRouter = createTRPCRouter({
 
       if (!dependencies) return package_obj;
 
-      ctx.prisma.dependency.createMany({
+      await ctx.prisma.dependency.createMany({
         data: dependencies.map((dep) => {
           return { forID: package_obj.ID, depID: dep.ID };
         }),

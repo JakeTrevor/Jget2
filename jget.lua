@@ -56,49 +56,54 @@ local function list()
     end
 
     print("installed packages:")
-    print(textutils.serialise())
+    print(textutils.serialise(pkgs))
 end
 
-local function fetch_pkg(name)
-    print("getting package " .. package)
-
-
-    local target_url = endpoint .. package
-
-    local response, reason, failRes = http.get {
-        url = target_url, method = "GET",
-    }
-
+local function handle_http_errors(response, reason, failRes)
     if not response then
         if not failRes then
             print("error: " .. reason)
-            return false
+            return nil
         end
 
         local data = textutils.unserialiseJSON(failRes.readAll())
 
         print("error: " .. data.message)
-        return false
+        return nil
     end
 
 
     if response.getResponseCode() ~= 200 then
         print("error: code " .. response.getResponseCode())
-        return false
+        return nil
     end
 
     local data = textutils.unserialiseJSON(response.readAll())
 
     if not data then
-        print("error")
+        print("error - request did not provide data")
     end
 
+    return data
+end
+
+local function fetch_pkg(pkg_name)
+    print("getting package " .. pkg_name)
+
+
+    local target_url = endpoint .. pkg_name
+
+    local data = handle_http_errors(http.get {
+        url = target_url, method = "GET",
+    })
+
+    if not data then return false end
 
     local files = textutils.unserialiseJSON(data["files"])
 
     ensure(outdir)
 
-    local install_dir = fs.combine(outdir, package)
+    local install_dir = fs.combine(outdir, pkg_name)
     install(install_dir, files)
 
     local dependencies = data["dependencies"]
@@ -161,7 +166,7 @@ local function get_dependencies(path)
     local dep_arr = {}
     local head = 1
 
-    if (~fs.exists(dep_file)) then return dep_arr end
+    if (not fs.exists(dep_file)) then return textutils.empty_json_array end
 
     local handle = fs.open(dep_file, "r")
     local next_line = handle.readLine();
@@ -171,7 +176,7 @@ local function get_dependencies(path)
         next_line = handle.readLine()
     end
 
-    return dep_arr
+    return dep_arr or textutils.empty_json_array
 end
 
 local function put(args)
@@ -194,16 +199,15 @@ local function put(args)
     local current_directory = shell.resolve("./packages/" .. package_name)
 
     local files = get_files(current_directory)
-    local dependencies = get_dependencies(current_directory)
 
     data["files"] = textutils.serialiseJSON(files)
-    data["dependencies"] = textutils.serialiseJSON(dependencies)
+    data["dependencies"] = get_dependencies(current_directory)
 
     local json_data = textutils.serialiseJSON(data)
 
     local target_url = endpoint .. package_name
 
-    print(target_url)
+    print("uploading package " .. package_name)
 
     local args = {
         url = target_url,
@@ -211,18 +215,10 @@ local function put(args)
         method = "PUT",
         headers = { ["Content-Type"] = "application/json" }
     }
-    local response, reason, _ = http.post(args)
 
-    if not response then
-        print("Error: " .. reason)
-        return
-    end
+    handle_http_errors(http.post(args))
 
-    if response.getResponseCode() == 200 then
-        print("Package uploaded successfully")
-    else
-        print("Error: code " .. response.getResponseCode())
-    end
+    print("success!")
 end
 
 local help_dict = {
