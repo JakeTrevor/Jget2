@@ -25,13 +25,13 @@ model Package {
 }
 
 model Dependency {
-  ID        String  @id @default(cuid())
-  for       Package @relation(name: "dependencyFor", fields: [packageID], references: [ID])
-  packageID String
+  ID    String  @id @default(cuid())
+  for   Package @relation(name: "dependencyFor", fields: [forID], references: [ID])
+  forID String  @map("packageID")
 
   dependsOn Package @relation(name: "dependsOn", fields: [depID], references: [ID])
   depID     String
 
-  @@index([packageID])
+  @@index([forID])
   @@index([depID])
 }

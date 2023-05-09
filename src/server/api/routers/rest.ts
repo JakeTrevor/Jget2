@@ -57,6 +57,7 @@ export const restRouter = createTRPCRouter({
       z.object({
         name: z.string(),
         files: z.string(),
+        dependencies: z.array(z.string()),
       })
     )
     .output(
@@ -64,14 +65,39 @@ export const restRouter = createTRPCRouter({
         name: z.string(),
       })
     )
-    .mutation(({ ctx, input }) => {
-      return ctx.prisma.package.upsert({
+    .mutation(async ({ ctx, input }) => {
+      let dependency_names = input.dependencies;
+      let data = {
+        name: input.name,
+        files: input.files,
+      };
+
+      let dependencies = await Promise.all(
+        dependency_names.map(async (dep_name) => {
+          let dep = await ctx.prisma.package.findUnique({
+            where: { name: dep_name },
+          });
+          if (!dep) throw new Error(`Dependency not found: ${dep_name}`);
+          return dep;
+        })
+      );
+
+      let package_obj = await ctx.prisma.package.upsert({
         where: {
           name: input.name,
         },
-        create: input,
-        update: { ...input, updatedAt: new Date(Date.now()) },
-        select: { name: true },
+        create: data,
+        update: { ...data, updatedAt: new Date(Date.now()) },
       });
+
+      if (!dependencies) return package_obj;
+
+      ctx.prisma.dependency.createMany({
+        data: dependencies.map((dep) => {
+          return { forID: package_obj.ID, depID: dep.ID };
+        }),
+      });
+
+      return package_obj;
     }),
 });
