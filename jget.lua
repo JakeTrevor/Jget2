@@ -162,7 +162,7 @@ local function get_files(path)
 end
 
 local function get_dependencies(path)
-    local dep_file = shell.resolve(path .. "/DEPENDENCIES")
+    local dep_file = shell.resolve(path .. "/DEPENDENCIES.txt")
     local dep_arr = {}
     local head = 1
 
