@@ -13,18 +13,23 @@ let PageControls: FC<props> = ({ page, num_pages: max, base }) => {
   page_numbers = page_numbers.filter((e) => e <= max && e > 0);
 
   return (
-    <div className="btn-group m-2">
+    <div className="btn-group m-2 font-title">
       <Link href={`${base}${1}`} className="btn-outline btn">
         First
       </Link>
       {page_numbers.map((e) => {
         return (
-          <Link href={`${base}${e}`} className="btn">
+          <Link
+            href={`${base}${e}`}
+            className={`btn-outline btn ${
+              e === page ? "bg-lime-500/30 text-lime-700" : ""
+            }`}
+          >
             {e}
           </Link>
         );
       })}
-      <Link href={`${base}${max}`} className="btn-outline btn">
+      <Link href={`${base}${max}`} className=" btn">
         Last
       </Link>
     </div>
