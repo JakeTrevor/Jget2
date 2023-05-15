@@ -5,6 +5,8 @@ import ReactCodeMirror from "@uiw/react-codemirror";
 import { atomone } from "@uiw/codemirror-theme-atomone";
 import { lua } from "@codemirror/legacy-modes/mode/lua";
 import { StreamLanguage } from "@codemirror/language";
+import jgetDark from "../codemirrorTheme";
+import { EditorView } from "codemirror";
 
 interface props {
   data: string;
@@ -27,28 +29,20 @@ let FileDisplay: FC<props> = ({ data, file_name, pointer, update }) => {
 
   return (
     <>
+      {lang === "md" && (
+        <div className="prose my-5 max-w-full rounded bg-base-200 p-2 prose-pre:bg-code">
+          <ReactMarkdown>{data}</ReactMarkdown>
+        </div>
+      )}
+
       <ReactCodeMirror
         value={data}
-        theme={atomone}
+        theme={jgetDark}
         onChange={(e) => {
           update(e, pointer);
         }}
-        extensions={[StreamLanguage.define(lua)]}
+        extensions={[StreamLanguage.define(lua), EditorView.lineWrapping]}
       />
-      {/* {lang === "md" ? (
-        <div className="prose mt-5 max-w-full rounded bg-base-200 p-2">
-          <ReactMarkdown>{data}</ReactMarkdown>
-        </div>
-      ) : (
-        <>
-          <div className={`${hljs ? "" : "hidden"}`}>
-            <pre>
-              <code className={`language-${lang}`}>{data}</code>
-            </pre>
-          </div>
-          {!hljs && <Loading />}
-        </>
-      )} */}
     </>
   );
 };
