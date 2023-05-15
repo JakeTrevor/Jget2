@@ -1,12 +1,12 @@
-import { FC, useEffect, useRef, useState } from "react";
-import Loading from "../Loading";
+import { FC } from "react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+
 import ReactCodeMirror from "@uiw/react-codemirror";
-import { atomone } from "@uiw/codemirror-theme-atomone";
 import { lua } from "@codemirror/legacy-modes/mode/lua";
 import { StreamLanguage } from "@codemirror/language";
-import jgetDark from "../codemirrorTheme";
 import { EditorView } from "codemirror";
+
+import jgetDark from "../codemirrorTheme";
 
 interface props {
   data: string;
@@ -16,15 +16,6 @@ interface props {
 }
 
 let FileDisplay: FC<props> = ({ data, file_name, pointer, update }) => {
-  let [hljs, setHljs] = useState(false);
-
-  useEffect(() => {
-    import("highlight.js").then((hljs) => {
-      setHljs(true);
-      hljs.default.highlightAll();
-    });
-  }, []);
-
   let lang = getExtension(file_name);
 
   return (
