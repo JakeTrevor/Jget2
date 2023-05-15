@@ -16,6 +16,8 @@
     "@trpc/next": "^10.18.0",
     "@trpc/react-query": "^10.18.0",
     "@trpc/server": "^10.18.0",
+    "@uiw/codemirror-theme-atomone": "^4.19.16",
+    "@uiw/react-codemirror": "^4.19.16",
     "daisyui": "^2.51.6",
     "highlight.js": "^11.7.0",
     "next": "^13.2.4",

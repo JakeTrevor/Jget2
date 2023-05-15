@@ -1,13 +1,17 @@
 import { FC, useEffect, useRef, useState } from "react";
 import Loading from "../Loading";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import ReactCodeMirror from "@uiw/react-codemirror";
+import { atomone } from "@uiw/codemirror-theme-atomone";
 
 interface props {
   data: string;
   file_name: string;
+  pointer: string[];
+  update: any;
 }
 
-let FileDisplay: FC<props> = ({ data, file_name }) => {
+let FileDisplay: FC<props> = ({ data, file_name, pointer, update }) => {
   let [hljs, setHljs] = useState(false);
 
   useEffect(() => {
@@ -21,7 +25,15 @@ let FileDisplay: FC<props> = ({ data, file_name }) => {
 
   return (
     <>
-      {lang === "md" ? (
+      <ReactCodeMirror
+        value={data}
+        height="200px"
+        theme={atomone}
+        onChange={(e) => {
+          update(e, pointer);
+        }}
+      />
+      {/* {lang === "md" ? (
         <div className="prose mt-5 max-w-full rounded bg-base-200 p-2">
           <ReactMarkdown>{data}</ReactMarkdown>
         </div>
@@ -34,7 +46,7 @@ let FileDisplay: FC<props> = ({ data, file_name }) => {
           </div>
           {!hljs && <Loading />}
         </>
-      )}
+      )} */}
     </>
   );
 };
