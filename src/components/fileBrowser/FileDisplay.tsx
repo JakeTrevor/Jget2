@@ -3,6 +3,8 @@ import Loading from "../Loading";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import ReactCodeMirror from "@uiw/react-codemirror";
 import { atomone } from "@uiw/codemirror-theme-atomone";
+import { lua } from "@codemirror/legacy-modes/mode/lua";
+import { StreamLanguage } from "@codemirror/language";
 
 interface props {
   data: string;
@@ -27,11 +29,11 @@ let FileDisplay: FC<props> = ({ data, file_name, pointer, update }) => {
     <>
       <ReactCodeMirror
         value={data}
-        height="200px"
         theme={atomone}
         onChange={(e) => {
           update(e, pointer);
         }}
+        extensions={[StreamLanguage.define(lua)]}
       />
       {/* {lang === "md" ? (
         <div className="prose mt-5 max-w-full rounded bg-base-200 p-2">

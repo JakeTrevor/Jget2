@@ -30,33 +30,26 @@ let FileBrowser: FC<props> = ({ package_name, data, pointer }) => {
   let result = getDir(files, pointer);
 
   function update(text: string, pointer: string[]) {
-    console.log("update!");
-    let copy: Directory = JSON.parse(JSON.stringify(files));
-
     function handleNested(
       current: Directory,
       pointer: string[],
       text: string
     ): Directory | string {
-      if (pointer.length == 0) return text;
+      if (pointer.length === 0) return text;
 
       let key = pointer[0] as string;
+      let next = current[key]! as Directory;
+      let result = handleNested(next, pointer.slice(1, -1), text);
 
-      let result: Directory | string = handleNested(
-        // @ts-ignore
-        current[key],
-        pointer.slice(1, -1),
-        text
-      );
       return {
         ...current,
         [key]: result,
       };
     }
 
-    // @ts-ignore
+    let copy: Directory = JSON.parse(JSON.stringify(files));
     copy = handleNested(copy, pointer, text) as Directory;
-    console.log(copy);
+
     setFiles(copy);
   }
 

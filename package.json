@@ -10,6 +10,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@codemirror/legacy-modes": "^6.3.2",
     "@prisma/client": "^4.11.0",
     "@tanstack/react-query": "^4.28.0",
     "@trpc/client": "^10.18.0",
@@ -18,6 +19,7 @@
     "@trpc/server": "^10.18.0",
     "@uiw/codemirror-theme-atomone": "^4.19.16",
     "@uiw/react-codemirror": "^4.19.16",
+    "codemirror": "^6.0.1",
     "daisyui": "^2.51.6",
     "highlight.js": "^11.7.0",
     "next": "^13.2.4",
