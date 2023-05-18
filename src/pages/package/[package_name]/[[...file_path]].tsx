@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 
 import CopyButton from "~/components/CopyButton";
 import FileBrowser from "~/components/fileBrowser";
+import Copy from "~/components/package/Copy";
 import Stats from "~/components/package/Stats";
 import { api } from "~/utils/api";
 
@@ -37,16 +38,7 @@ const Packages: NextPage = () => {
           <div className="divider" />
           <div className="flex flex-row justify-between">
             <Stats {...stats} />
-            {/* copy */}
-            <div>
-              <h4 className="font-semibold italic text-accent">
-                Install this package:
-              </h4>
-              <pre className="rounded-md bg-code p-3 text-emerald-500">
-                $ <span className="text-white">jget get {package_name} </span>
-                <CopyButton text={`jget get ${package_name}`} />
-              </pre>
-            </div>
+            <Copy package_name={package_name} />
           </div>
         </section>
         {data?.files && (
