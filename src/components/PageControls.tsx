@@ -29,7 +29,7 @@ let PageControls: FC<props> = ({ page, num_pages: max, base }) => {
           </Link>
         );
       })}
-      <Link href={`${base}${max}`} className=" btn">
+      <Link href={`${base}${max}`} className="btn-outline btn">
         Last
       </Link>
     </div>

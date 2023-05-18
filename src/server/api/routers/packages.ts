@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 5;
 
 export const packageRouter = createTRPCRouter({
   count: publicProcedure.query(({ ctx }) => {
