@@ -22,7 +22,31 @@ let FileDisplay: FC<props> = ({ data, file_name, pointer, update }) => {
     <>
       {lang === "md" && (
         <div className="prose my-5 max-w-full rounded bg-base-200 p-2 prose-pre:bg-code">
-          <ReactMarkdown>{data}</ReactMarkdown>
+          <ReactMarkdown
+            components={{
+              code({ node, inline, className, children, ...props }) {
+                return !inline ? (
+                  <ReactCodeMirror
+                    {...props}
+                    value={String(children)}
+                    theme={jgetDark}
+                    onChange={(e) => {
+                      update(e, pointer);
+                    }}
+                    extensions={[
+                      StreamLanguage.define(lua),
+                      EditorView.lineWrapping,
+                    ]}
+                    readOnly={true}
+                  />
+                ) : (
+                  <code>{children}</code>
+                );
+              },
+            }}
+          >
+            {data}
+          </ReactMarkdown>
         </div>
       )}
 
