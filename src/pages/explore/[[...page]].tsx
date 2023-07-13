@@ -2,7 +2,8 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Loading from "~/components/Loading";
-import PageControls from "~/components/PageControls";
+import FilterControls from "~/components/explore/FilterControls";
+import PageControls from "~/components/explore/PageControls";
 import PackageListing from "~/components/package/PackageListing";
 import { api } from "~/utils/api";
 
@@ -31,7 +32,9 @@ const Packages: NextPage = () => {
           <Loading />
         ) : (
           <>
-            <div id="FilterControls" />
+            <div className="flex flex-col items-center justify-center py-20 pl-10 pr-20">
+              <FilterControls />
+            </div>
             <div className="col-span-2 flex flex-col items-center justify-around">
               <ul className="menu rounded-box h-[52vh] w-full bg-base-100 p-2">
                 {packages.map((pkg) => (
