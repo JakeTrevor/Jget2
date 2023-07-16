@@ -14,10 +14,13 @@ export const packageRouter = createTRPCRouter({
       z.object({
         search: z.optional(z.string()),
         page: z.number().min(1).default(1),
+        orderBy: z.optional(z.enum(["downloads", "name", "updatedAt", "dp"])),
       })
     )
-    .query(async ({ ctx, input: { search, page } }) => {
+    .query(async ({ ctx, input: { search, page, orderBy } }) => {
       let clause = search ? { name: { contains: search } } : {};
+
+      let ordering = orderBy ? { [orderBy]: true } : {};
 
       let count = await ctx.prisma.package.count({ where: clause });
 
@@ -25,6 +28,7 @@ export const packageRouter = createTRPCRouter({
         take: PAGE_SIZE,
         skip: (page - 1) * PAGE_SIZE,
         where: clause,
+        orderBy: ordering,
       });
 
       return {
