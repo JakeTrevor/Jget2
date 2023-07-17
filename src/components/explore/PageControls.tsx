@@ -1,10 +1,11 @@
 import Link from "next/link";
 import type { FC } from "react";
+import { UrlObject } from "url";
 
 interface props {
   page: number;
   num_pages: number;
-  base: string;
+  base: { pathname: string; query: Record<string, any> };
 }
 
 let PageControls: FC<props> = ({ page, num_pages: max, base }) => {
@@ -14,14 +15,18 @@ let PageControls: FC<props> = ({ page, num_pages: max, base }) => {
 
   return (
     <div className="btn-group m-2 font-title">
-      <Link href={`${base}${1}`} className="btn-outline btn">
+      <Link
+        href={{ ...base, query: { ...base.query, page: 1 } }}
+        className="btn btn-outline"
+      >
         First
       </Link>
       {page_numbers.map((e) => {
         return (
           <Link
-            href={`${base}${e}`}
-            className={`btn-outline btn ${
+            key={e}
+            href={{ ...base, query: { ...base.query, page: e } }}
+            className={`btn btn-outline ${
               e === page ? "bg-lime-500/30 text-lime-700" : ""
             }`}
           >
@@ -29,7 +34,10 @@ let PageControls: FC<props> = ({ page, num_pages: max, base }) => {
           </Link>
         );
       })}
-      <Link href={`${base}${max}`} className="btn-outline btn">
+      <Link
+        href={{ ...base, query: { ...base.query, page: max } }}
+        className="btn btn-outline"
+      >
         Last
       </Link>
     </div>
