@@ -14,8 +14,10 @@ export const packageRouter = createTRPCRouter({
       z.object({
         search: z.optional(z.string()),
         page: z.number().min(1).default(1),
-        sort: z.optional(z.enum(["downloads", "name", "updatedAt"])),
-        order: z.optional(z.enum(["asc", "desc"])).default("asc"),
+        sort: z
+          .optional(z.enum(["downloads", "name", "updatedAt"]))
+          .default("downloads"),
+        order: z.optional(z.enum(["asc", "desc"])).default("desc"),
       })
     )
     .query(async ({ ctx, input: { search, page, sort: orderBy, order } }) => {

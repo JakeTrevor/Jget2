@@ -1,18 +1,16 @@
 import { useRouter } from "next/router";
 import type { FC } from "react";
+import { exploreDefaults, exploreQuery, newURL } from "~/utils/ExploreUrlMaker";
 
 interface props {
-  query: { sort?: "downloads" | "name" | "updatedAt"; order: "asc" | "desc" };
+  query: exploreQuery;
 }
 
-const FilterControls: FC<props> = ({ query }) => {
+const FilterControls: FC<props> = ({ query: Q }) => {
+  let query = { ...exploreDefaults, ...Q };
   let router = useRouter();
 
-  let redirectTo = (newQuery: string) => () =>
-    router.push({
-      pathname: "/explore/",
-      query: { ...query, sort: newQuery },
-    });
+  let redirectTo = (newQ: exploreQuery) => () => router.push(newURL(Q)(newQ));
 
   return (
     <div className="rounded-box flex h-full w-full flex-col bg-base-100 p-4">
@@ -22,15 +20,9 @@ const FilterControls: FC<props> = ({ query }) => {
       <span className="flex flex-row justify-between">
         <h2>sort:</h2>
         <button
-          onClick={() =>
-            router.push({
-              pathname: "/explore/",
-              query: {
-                ...query,
-                order: query.order === "asc" ? "desc" : "asc",
-              },
-            })
-          }
+          onClick={redirectTo({
+            order: query.order === "asc" ? "desc" : "asc",
+          })}
           className="text-sm"
         >
           {query.order}
@@ -42,9 +34,9 @@ const FilterControls: FC<props> = ({ query }) => {
           <input
             type="radio"
             name="radio-10"
-            checked={query.sort === "name"}
+            checked={query.sorting === "name"}
             className="radio checked:bg-secondary"
-            onClick={redirectTo("name")}
+            onClick={redirectTo({ sorting: "name" })}
           />
         </label>
       </div>
@@ -54,9 +46,9 @@ const FilterControls: FC<props> = ({ query }) => {
           <input
             type="radio"
             name="radio-10"
-            checked={query.sort === "downloads"}
+            checked={query.sorting === "downloads"}
             className="radio checked:bg-secondary"
-            onClick={redirectTo("downloads")}
+            onClick={redirectTo({ sorting: "downloads" })}
           />
         </label>
       </div>
@@ -66,9 +58,9 @@ const FilterControls: FC<props> = ({ query }) => {
           <input
             type="radio"
             name="radio-10"
-            checked={query.sort === "updatedAt"}
+            checked={query.sorting === "updatedAt"}
             className="radio checked:bg-secondary"
-            onClick={redirectTo("updatedAt")}
+            onClick={redirectTo({ sorting: "updatedAt" })}
           />
         </label>
       </div>

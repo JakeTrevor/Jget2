@@ -1,31 +1,31 @@
 import Link from "next/link";
 import type { FC } from "react";
-import { UrlObject } from "url";
+
+import { exploreQuery, newURL } from "~/utils/ExploreUrlMaker";
 
 interface props {
-  page: number;
   num_pages: number;
-  base: { pathname: string; query: Record<string, any> };
+  query: exploreQuery;
 }
 
-let PageControls: FC<props> = ({ page, num_pages: max, base }) => {
+let PageControls: FC<props> = ({ num_pages: max, query }) => {
+  let page = query.page || 1;
   let page_numbers = [page - 2, page - 1, page, page + 1, page + 2];
 
   page_numbers = page_numbers.filter((e) => e <= max && e > 0);
 
+  let redirectTo = newURL(query);
+
   return (
     <div className="btn-group m-2 font-title">
-      <Link
-        href={{ ...base, query: { ...base.query, page: 1 } }}
-        className="btn btn-outline"
-      >
+      <Link href={redirectTo({ page: 1 })} className="btn btn-outline">
         First
       </Link>
       {page_numbers.map((e) => {
         return (
           <Link
             key={e}
-            href={{ ...base, query: { ...base.query, page: e } }}
+            href={redirectTo({ page: e })}
             className={`btn btn-outline ${
               e === page ? "bg-lime-500/30 text-lime-700" : ""
             }`}
@@ -34,10 +34,7 @@ let PageControls: FC<props> = ({ page, num_pages: max, base }) => {
           </Link>
         );
       })}
-      <Link
-        href={{ ...base, query: { ...base.query, page: max } }}
-        className="btn btn-outline"
-      >
+      <Link href={redirectTo({ page: max })} className="btn btn-outline">
         Last
       </Link>
     </div>

@@ -1,29 +1,12 @@
 import { type NextPage } from "next";
 import { useRouter } from "next/router";
-import { z } from "zod";
 
 import Loading from "~/components/Loading";
 import FilterControls from "~/components/explore/FilterControls";
 import PageControls from "~/components/explore/PageControls";
 import PackageListing from "~/components/package/PackageListing";
+import { querySchema } from "~/utils/ExploreUrlMaker";
 import { api } from "~/utils/api";
-
-let querySchema = z.object({
-  page: z.coerce.number().optional().default(1),
-  search: z.coerce.string().optional(),
-  sort: z.optional(z.string()).transform((str) => {
-    if (str && ["downloads", "name", "updatedAt"].includes(str))
-      return str as "downloads" | "name" | "updatedAt";
-    return undefined;
-  }),
-  order: z
-    .optional(z.string())
-    .transform((str) => {
-      if (str && ["asc", "desc"].includes(str)) return str as "asc" | "desc";
-      return undefined;
-    })
-    .default("asc"),
-});
 
 const Packages: NextPage = () => {
   let router = useRouter();
@@ -58,11 +41,7 @@ const Packages: NextPage = () => {
             <PackageListing data={pkg} key={i} />
           ))}
         </ul>
-        <PageControls
-          page={query.page}
-          num_pages={num_pages}
-          base={{ pathname: "/explore/", query }}
-        />
+        <PageControls num_pages={num_pages} query={query} />
       </div>
     </main>
   );
