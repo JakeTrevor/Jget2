@@ -86,13 +86,13 @@ let FileBrowser: FC<props> = ({ package_name, data, pointer }) => {
         </div>
         <p>{status}</p>
         <button
-          onClick={() => {
+          onClick={() =>
             mutate({
               name: package_name,
               dependencies: [],
               files: JSON.stringify(files),
-            });
-          }}
+            })
+          }
           className="btn-success btn"
         >
           Save

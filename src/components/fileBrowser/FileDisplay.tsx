@@ -30,9 +30,7 @@ let FileDisplay: FC<props> = ({ data, file_name, pointer, update }) => {
                     {...props}
                     value={String(children)}
                     theme={jgetDark}
-                    onChange={(e) => {
-                      update(e, pointer);
-                    }}
+                    onChange={(e) => update(e, pointer)}
                     extensions={[
                       StreamLanguage.define(lua),
                       EditorView.lineWrapping,
@@ -53,9 +51,7 @@ let FileDisplay: FC<props> = ({ data, file_name, pointer, update }) => {
       <ReactCodeMirror
         value={data}
         theme={jgetDark}
-        onChange={(e) => {
-          update(e, pointer);
-        }}
+        onChange={(e) => update(e, pointer)}
         extensions={[StreamLanguage.define(lua), EditorView.lineWrapping]}
       />
     </>
