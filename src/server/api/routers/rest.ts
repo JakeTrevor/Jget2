@@ -48,6 +48,7 @@ export const restRouter = createTRPCRouter({
           },
         },
       });
+
       return {
         ...pkg,
         dependencies: pkg.dependencies.map((e) => e.dependsOn.name),
