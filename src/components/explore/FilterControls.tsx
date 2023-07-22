@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
 import type { FC } from "react";
 import { exploreDefaults, exploreQuery, newURL } from "~/utils/ExploreUrlMaker";
+import Ascending from "~/icons/ascending.svg";
+import Descending from "~/icons/descending.svg";
 
 interface props {
   query: exploreQuery;
@@ -25,7 +27,11 @@ const FilterControls: FC<props> = ({ query: Q }) => {
           })}
           className="text-sm"
         >
-          {query.order}
+          {query.order === "asc" ? (
+            <Descending width="15" className="m-2 inline" />
+          ) : (
+            <Ascending width="15" className="m-2 inline" />
+          )}
         </button>
       </span>
       <div className="form-control">
