@@ -2,7 +2,6 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-import CopyButton from "~/components/CopyButton";
 import FileBrowser from "~/components/fileBrowser";
 import Copy from "~/components/package/Copy";
 import Stats from "~/components/package/Stats";

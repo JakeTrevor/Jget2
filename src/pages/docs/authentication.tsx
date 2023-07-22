@@ -1,8 +1,5 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import Token from "~/components/token";
 
 const Profile: NextPage = () => {
   return (
