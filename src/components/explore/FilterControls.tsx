@@ -19,8 +19,7 @@ const FilterControls: FC<props> = ({ query: Q }) => {
       <h1 className="border-b-2 border-secondary p-1 text-2xl">
         Filter Packages
       </h1>
-      <span className="flex flex-row justify-between">
-        <h2>sort:</h2>
+      <span className="flex flex-row justify-end">
         <button
           onClick={redirectTo({
             order: query.order === "asc" ? "desc" : "asc",
