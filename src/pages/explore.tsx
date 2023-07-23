@@ -31,16 +31,17 @@ const Packages: NextPage = () => {
   let { packages, num_pages } = data!;
 
   return (
-    <main className="grid h-[93vh] w-full grid-cols-4 bg-base-200">
-      <div className="flex flex-col items-center justify-center py-20 pl-10 pr-20">
+    <main className="grid w-full grid-cols-4 gap-4 bg-base-200 p-10">
+      <div className="row-span-2 pl-4 pr-12">
         <FilterControls query={query} />
       </div>
-      <div className="col-span-2 flex flex-col items-center justify-around">
-        <ul className="menu rounded-box h-[52vh] w-full bg-base-100 p-2">
-          {packages.map((pkg, i) => (
-            <PackageListing data={pkg} key={i} />
-          ))}
-        </ul>
+
+      <ul className="rounded-box col-span-2 row-span-2 flex h-[60vh] w-full flex-col flex-nowrap justify-start bg-base-100 p-2">
+        {packages.map((pkg, i) => (
+          <PackageListing data={pkg} key={i} />
+        ))}
+      </ul>
+      <div className="col-span-2 col-start-2 flex items-center justify-center">
         <PageControls num_pages={num_pages} query={query} />
       </div>
     </main>

@@ -17,10 +17,11 @@ const SearchBar: FC = () => {
   }
 
   return (
-    <span className="self-end rounded-lg bg-base-200">
+    <span className="border-infoborder self-end rounded-lg border border-transparent bg-base-200 focus-within:border-info">
       <input
         type="text"
-        className="rounded-lg bg-transparent p-1"
+        className="rounded-lg bg-transparent p-1 px-2 outline-none"
+        placeholder="search packages..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         onKeyDown={(e) => {
