@@ -22,6 +22,7 @@ model Package {
   updatedAt    DateTime     @default(now())
   dependents   Dependency[] @relation(name: "dependsOn")
   dependencies Dependency[] @relation(name: "dependencyFor")
+  Authors      Author[]
 }
 
 model Dependency {
@@ -34,6 +35,18 @@ model Dependency {
 
   @@index([forID])
   @@index([depID])
+}
+
+model Author {
+  ID      String  @id @default(cuid())
+  user    User    @relation(fields: [userId], references: [id])
+  package Package @relation(fields: [packageID], references: [ID])
+
+  userId    String
+  packageID String
+
+  @@index([userId])
+  @@index([packageID])
 }
 
 // Necessary for Next auth
@@ -74,6 +87,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  Authorship    Author[]
 }
 
 model VerificationToken {
