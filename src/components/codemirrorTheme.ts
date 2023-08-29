@@ -10,7 +10,7 @@ const jgetDark = createTheme({
     selection: "#036dd626",
     selectionMatch: "#036dd626",
     lineHighlight: "#8a91991a",
-    gutterBackground: "#27272a",
+    gutterBackground: "#1a1919",
     gutterForeground: "#8a919966",
   },
   styles: [

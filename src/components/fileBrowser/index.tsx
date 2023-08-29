@@ -25,35 +25,7 @@ function getDir(data: Directory, pointer: string[]) {
 }
 
 let FileBrowser: FC<props> = ({ package_name, data, pointer }) => {
-  let [files, setFiles] = useState(data);
-
-  let result = getDir(files, pointer);
-
-  function update(text: string, pointer: string[]) {
-    function handleNested(
-      current: Directory,
-      pointer: string[],
-      text: string
-    ): Directory | string {
-      if (pointer.length === 0) return text;
-
-      let key = pointer[0] as string;
-      let next = current[key]! as Directory;
-      let result = handleNested(next, pointer.slice(1, -1), text);
-
-      return {
-        ...current,
-        [key]: result,
-      };
-    }
-
-    let copy: Directory = JSON.parse(JSON.stringify(files));
-    copy = handleNested(copy, pointer, text) as Directory;
-
-    setFiles(copy);
-  }
-
-  let { mutate, status } = api.rest.upload.useMutation();
+  let result = getDir(data, pointer);
 
   let backDest =
     pointer.length > 0
@@ -61,8 +33,8 @@ let FileBrowser: FC<props> = ({ package_name, data, pointer }) => {
       : `/package/${package_name}`;
 
   return (
-    <section className="mockup-code mb-20 min-h-[50vh] w-3/4 bg-secondary p-5 shadow-xl">
-      <div className="flex flex-row justify-between">
+    <section className="mb-20 min-h-[50vh] w-3/4 overflow-hidden rounded-md bg-code text-white shadow-xl">
+      <div className="flex flex-row items-baseline justify-between border-b border-white p-5">
         <div className="breadcrumbs text-sm">
           <ul className="font-mono underline-offset-4">
             <li>
@@ -84,19 +56,7 @@ let FileBrowser: FC<props> = ({ package_name, data, pointer }) => {
             })}
           </ul>
         </div>
-        <p>{status}</p>
-        <button
-          onClick={() =>
-            mutate({
-              name: package_name,
-              dependencies: [],
-              files: JSON.stringify(files),
-            })
-          }
-          className="btn-success btn"
-        >
-          Save
-        </button>
+
         <Link
           className={`transition-all ${
             pointer.length > 0
@@ -109,11 +69,9 @@ let FileBrowser: FC<props> = ({ package_name, data, pointer }) => {
           <Back width={15} />
         </Link>
       </div>
-      <div className="divider my-1 -mb-3 before:bg-zinc-700 after:bg-zinc-700" />
       {typeof result === "string" ? (
         <FileDisplay
           data={result}
-          update={update}
           pointer={pointer}
           file_name={pointer.at(-1) || ""}
         />

@@ -1,8 +1,6 @@
 import Link from "next/link";
 import { FC, useEffect } from "react";
-
-import File from "~/icons/file.svg";
-import Folder from "~/icons/folder.svg";
+import Icon from "./Icon";
 
 interface props {
   data: Directory;
@@ -35,11 +33,7 @@ let FileList: FC<props> = ({ package_name, pointer, data }) => {
       {keys.map((key) => (
         <>
           <div className="col-span-1 flex items-center justify-end pr-2">
-            {typeof data[key] === "string" ? (
-              <File className="text-white" width={15} />
-            ) : (
-              <Folder width={15} />
-            )}
+            <Icon data={data} item={key} />
           </div>
           <Link
             className="link-hover link col-span-2 pl-2 sm:col-span-6 md:col-span-5 lg:col-span-8 xl:col-span-11"

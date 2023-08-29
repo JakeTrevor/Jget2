@@ -5,3 +5,8 @@
 .media-debug {
   @apply bg-lime-300 sm:bg-orange-400 md:bg-red-500 lg:bg-purple-500 xl:bg-emerald-400;
 }
+
+.prose :where(pre):not(:where([class~="not-prose"] *)) {
+  padding: 0;
+  padding-left: 0.4em;
+}

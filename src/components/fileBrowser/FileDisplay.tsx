@@ -12,30 +12,27 @@ interface props {
   data: string;
   file_name: string;
   pointer: string[];
-  update: any;
 }
 
-let FileDisplay: FC<props> = ({ data, file_name, pointer, update }) => {
+let FileDisplay: FC<props> = ({ data, file_name, pointer }) => {
   let lang = getExtension(file_name);
 
   return (
     <>
-      {lang === "md" && (
-        <div className="prose my-5 max-w-full rounded bg-base-200 p-2 prose-pre:bg-code">
+      {lang === "md" ? (
+        <div className="prose m-5 max-w-full rounded bg-base-200 p-2 prose-pre:bg-code">
           <ReactMarkdown
             components={{
               code({ node, inline, className, children, ...props }) {
                 return !inline ? (
                   <ReactCodeMirror
-                    {...props}
+                    readOnly={true}
                     value={String(children)}
                     theme={jgetDark}
-                    onChange={(e) => update(e, pointer)}
                     extensions={[
                       StreamLanguage.define(lua),
                       EditorView.lineWrapping,
                     ]}
-                    readOnly={true}
                   />
                 ) : (
                   <code>{children}</code>
@@ -46,14 +43,14 @@ let FileDisplay: FC<props> = ({ data, file_name, pointer, update }) => {
             {data}
           </ReactMarkdown>
         </div>
+      ) : (
+        <ReactCodeMirror
+          readOnly={true}
+          value={data}
+          theme={jgetDark}
+          extensions={[StreamLanguage.define(lua), EditorView.lineWrapping]}
+        />
       )}
-
-      <ReactCodeMirror
-        value={data}
-        theme={jgetDark}
-        onChange={(e) => update(e, pointer)}
-        extensions={[StreamLanguage.define(lua), EditorView.lineWrapping]}
-      />
     </>
   );
 };
