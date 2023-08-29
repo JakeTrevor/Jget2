@@ -17,7 +17,7 @@ const Home: NextPage = () => {
       <main className="flex flex-col">
         <section className="hero min-h-screen bg-base-200">
           <div className="hero-content flex-col lg:flex-row-reverse">
-            <div className="rounded-box flex flex-col bg-neutral p-2 font-title text-neutral-content">
+            <div className="rounded-box flex flex-col bg-primary p-2 font-title text-neutral-content">
               <span className="countdown font-title text-5xl">
                 {/* @ts-ignore */}
                 <span style={{ "--value": pkg_count }}></span>

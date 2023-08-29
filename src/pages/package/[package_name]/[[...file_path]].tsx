@@ -2,10 +2,9 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-import Downloads from "~/icons/downloads.svg";
-
-import CopyButton from "~/components/CopyButton";
 import FileBrowser from "~/components/fileBrowser";
+import Copy from "~/components/package/Copy";
+import Stats from "~/components/package/Stats";
 import { api } from "~/utils/api";
 
 const Packages: NextPage = () => {
@@ -19,9 +18,11 @@ const Packages: NextPage = () => {
 
   const { data } = api.package.getByName.useQuery(package_name);
 
-  const download_count = data?.downloads || 0;
-  const created_at = data?.createdAt || new Date();
-  const updated_at = data?.updatedAt || new Date();
+  const stats = {
+    download_count: data?.downloads || 0,
+    created_at: data?.createdAt || new Date(),
+    updated_at: data?.updatedAt || new Date(),
+  };
 
   return (
     <>
@@ -35,36 +36,8 @@ const Packages: NextPage = () => {
           <h2 className="text-3xl font-bold">{package_name}</h2>
           <div className="divider" />
           <div className="flex flex-row justify-between">
-            <div className="stats">
-              <div className="stat">
-                <div className="stat-figure text-primary">
-                  <Downloads width={30} />
-                </div>
-                <div className="stat-title">Downloads</div>
-                <div className="stat-value text-primary">{download_count}</div>
-              </div>
-              <div className="stat">
-                <div className="stat-title">Created On</div>
-                <div className="stat-value text-primary">
-                  {created_at.toLocaleDateString()}
-                </div>
-              </div>
-              <div className="stat">
-                <div className="stat-title">Last Updated</div>
-                <div className="stat-value text-primary">
-                  {updated_at.toLocaleDateString()}
-                </div>
-              </div>
-            </div>
-            <div>
-              <h4 className="font-semibold italic text-accent">
-                Install this package:
-              </h4>
-              <pre className="rounded-md bg-secondary p-3 text-emerald-500">
-                $ <span className="text-white">jget get {package_name} </span>
-                <CopyButton text={`jget get ${package_name}`} />
-              </pre>
-            </div>
+            <Stats {...stats} />
+            <Copy package_name={package_name} />
           </div>
         </section>
         {data?.files && (
