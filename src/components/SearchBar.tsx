@@ -3,7 +3,7 @@ import { useState, type FC } from "react";
 
 import Search from "~/icons/search.svg";
 
-import { newURL, querySchema } from "~/utils/ExploreUrlMaker";
+import { newURL, querySchema } from "~/utils/ExplorePageUrlMaker";
 
 const SearchBar: FC = () => {
   let router = useRouter();

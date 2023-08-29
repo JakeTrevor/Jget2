@@ -23,7 +23,7 @@ let FileList: FC<props> = ({ package_name, pointer, data }) => {
   });
 
   return (
-    <section className="grid w-full grid-cols-3 gap-y-2 sm:grid-cols-7 md:grid-cols-6 lg:grid-cols-9 xl:grid-cols-12">
+    <section className="mb-2 grid w-full grid-cols-3 gap-y-2 sm:grid-cols-7 md:grid-cols-6 lg:grid-cols-9 xl:grid-cols-12">
       <p className="col-span-1 mb-1 bg-zinc-800 pb-1 pr-2 text-end font-title">
         Type
       </p>

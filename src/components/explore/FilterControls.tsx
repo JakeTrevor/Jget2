@@ -1,6 +1,10 @@
 import { useRouter } from "next/router";
 import type { FC } from "react";
-import { exploreDefaults, exploreQuery, newURL } from "~/utils/ExploreUrlMaker";
+import {
+  exploreDefaults,
+  exploreQuery,
+  newURL,
+} from "~/utils/ExplorePageUrlMaker";
 import Ascending from "~/icons/ascending.svg";
 import Descending from "~/icons/descending.svg";
 

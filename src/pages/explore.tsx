@@ -5,7 +5,7 @@ import Loading from "~/components/Loading";
 import FilterControls from "~/components/explore/FilterControls";
 import PageControls from "~/components/explore/PageControls";
 import PackageListing from "~/components/package/PackageListing";
-import { querySchema } from "~/utils/ExploreUrlMaker";
+import { querySchema } from "~/utils/ExplorePageUrlMaker";
 import { api } from "~/utils/api";
 
 const Packages: NextPage = () => {

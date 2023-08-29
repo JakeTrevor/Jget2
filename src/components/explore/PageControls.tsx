@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { FC } from "react";
 
-import { exploreQuery, newURL } from "~/utils/ExploreUrlMaker";
+import { exploreQuery, newURL } from "~/utils/ExplorePageUrlMaker";
 
 interface props {
   num_pages: number;
@@ -18,7 +18,7 @@ let PageControls: FC<props> = ({ num_pages: max, query }) => {
 
   return (
     <div className="btn-group m-2 font-title">
-      <Link href={redirectTo({ page: 1 })} className="btn btn-outline">
+      <Link href={redirectTo({ page: 1 })} className="btn-outline btn">
         First
       </Link>
       {page_numbers.map((e) => {
@@ -26,7 +26,7 @@ let PageControls: FC<props> = ({ num_pages: max, query }) => {
           <Link
             key={e}
             href={redirectTo({ page: e })}
-            className={`btn btn-outline ${
+            className={`btn-outline btn ${
               e === page ? "bg-lime-500/30 text-lime-700" : ""
             }`}
           >
@@ -34,7 +34,7 @@ let PageControls: FC<props> = ({ num_pages: max, query }) => {
           </Link>
         );
       })}
-      <Link href={redirectTo({ page: max })} className="btn btn-outline">
+      <Link href={redirectTo({ page: max })} className="btn-outline btn">
         Last
       </Link>
     </div>
