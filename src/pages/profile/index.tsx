@@ -1,10 +1,19 @@
 import { type NextPage } from "next";
-import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { api } from "~/utils/api";
 
 const Profile: NextPage = () => {
-  let router = useRouter();
+  let user = useSession();
+  const userID = user.data?.user.id;
+  if (!userID) return <>403</>;
+  const {
+    data: packages,
+    status,
+    error,
+  } = api.user.getUserPackages.useQuery({ userID });
+
   return (
     <main className="grid h-[93vh] grid-cols-4 items-center gap-5 bg-base-200 p-10">
       <div className="col-span-3 flex h-full flex-col">
@@ -41,7 +50,7 @@ const Profile: NextPage = () => {
         />
       </div>
       <div className="col-span-4 flex w-5/6 flex-row flex-wrap justify-center">
-        your packages
+        {status === "success" && packages.map((e) => <div>{e.name}</div>)}
       </div>
     </main>
   );
