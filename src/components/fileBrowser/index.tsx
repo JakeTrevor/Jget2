@@ -14,7 +14,6 @@ interface props {
 }
 
 function getDir(data: Directory, pointer: string[]) {
-  console.log(data, pointer);
   return pointer.reduce(
     (acc: Directory | string, val: string): Directory | string => {
       if (typeof acc === "string") return acc;

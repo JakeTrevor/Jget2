@@ -74,7 +74,7 @@ const Packages: NextPage = () => {
             <Copy package_name={package_name} />
           </div>
         </section>
-        {files && (
+        {Object.keys(files).length !== 0 && (
           <FileBrowser
             update={update}
             package_name={package_name}
