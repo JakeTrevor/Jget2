@@ -1,15 +1,12 @@
+import Head from "next/head";
 import type { FC, ReactNode } from "react";
 import Header from "./header";
-import Head from "next/head";
-import { useRouter } from "next/router";
+import { Toaster } from "react-hot-toast";
 
 let Layout: FC<{ children: ReactNode }> = ({ children }) => {
-  const router = useRouter();
-
-  if (router.pathname === "/edit") return <>{children}</>;
-
   return (
     <>
+      <Toaster />
       <Head>
         <title>JGET</title>
         <meta name="description" content="JGET Package Manager" />
