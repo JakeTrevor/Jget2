@@ -4,6 +4,10 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 const PAGE_SIZE = 5;
 
+const directorySchema: z.ZodType<Directory> = z.lazy(() =>
+  z.record(z.string().or(directorySchema))
+);
+
 export const packageRouter = createTRPCRouter({
   count: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.package.count();
@@ -53,5 +57,16 @@ export const packageRouter = createTRPCRouter({
       };
 
       return data;
+    }),
+
+  updatePackage: publicProcedure
+    .input(z.object({ name: z.string(), data: directorySchema }))
+    .mutation(async ({ ctx, input: { name, data } }) => {
+      let files = JSON.stringify(data);
+
+      return await ctx.prisma.package.update({
+        where: { name },
+        data: { files },
+      });
     }),
 });

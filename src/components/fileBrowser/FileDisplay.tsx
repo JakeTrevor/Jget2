@@ -9,13 +9,35 @@ import { EditorView } from "codemirror";
 import jgetDark from "../codemirrorTheme";
 
 interface props {
+  editable: boolean;
   data: string;
   file_name: string;
   pointer: string[];
+  update: (data: string, pointer: string[]) => void;
 }
 
-let FileDisplay: FC<props> = ({ data, file_name, pointer }) => {
+let FileDisplay: FC<props> = ({
+  data,
+  file_name,
+  editable,
+  pointer,
+  update,
+}) => {
   let lang = getExtension(file_name);
+
+  // TODO also add a markdown language thingy
+
+  if (editable)
+    return (
+      <ReactCodeMirror
+        value={data}
+        theme={jgetDark}
+        onChange={(e) => {
+          update(e, pointer);
+        }}
+        extensions={[StreamLanguage.define(lua), EditorView.lineWrapping]}
+      />
+    );
 
   return (
     <>
@@ -23,7 +45,7 @@ let FileDisplay: FC<props> = ({ data, file_name, pointer }) => {
         <div className="prose m-5 max-w-full rounded bg-base-200 p-2 prose-pre:bg-code">
           <ReactMarkdown
             components={{
-              code({ node, inline, className, children, ...props }) {
+              code({ inline, children }) {
                 return !inline ? (
                   <ReactCodeMirror
                     readOnly={true}

@@ -5,10 +5,12 @@ import Link from "next/link";
 
 import Back from "~/icons/back.svg";
 import { api } from "~/utils/api";
+import toast from "react-hot-toast";
 interface props {
   data: Directory;
   pointer: string[];
   package_name: string;
+  update: (data: string, pointer: string[]) => void;
 }
 
 function getDir(data: Directory, pointer: string[]) {
@@ -24,7 +26,11 @@ function getDir(data: Directory, pointer: string[]) {
   );
 }
 
-let FileBrowser: FC<props> = ({ package_name, data, pointer }) => {
+let FileBrowser: FC<props> = ({ package_name, data, pointer, update }) => {
+  const [editable, setEditable] = useState(false);
+
+  let { mutateAsync } = api.package.updatePackage.useMutation();
+
   let result = getDir(data, pointer);
 
   let backDest =
@@ -57,6 +63,31 @@ let FileBrowser: FC<props> = ({ package_name, data, pointer }) => {
           </ul>
         </div>
 
+        {typeof result === "string" &&
+          (editable ? (
+            <button
+              onClick={() =>
+                toast
+                  .promise(mutateAsync({ name: package_name, data }), {
+                    loading: "Saving...",
+                    success: "Saved!",
+                    error: "something went wrong",
+                  })
+                  .then(() => setEditable(false))
+              }
+              className="btn ml-auto mr-10 bg-accent"
+            >
+              save
+            </button>
+          ) : (
+            <button
+              onClick={() => setEditable(true)}
+              className="btn ml-auto mr-10 bg-accent"
+            >
+              edit
+            </button>
+          ))}
+
         <Link
           className={`transition-all ${
             pointer.length > 0
@@ -71,6 +102,8 @@ let FileBrowser: FC<props> = ({ package_name, data, pointer }) => {
       </div>
       {typeof result === "string" ? (
         <FileDisplay
+          update={update}
+          editable={editable}
           data={result}
           pointer={pointer}
           file_name={pointer.at(-1) || ""}

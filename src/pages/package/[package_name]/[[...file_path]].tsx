@@ -1,6 +1,7 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { useCallback, useState } from "react";
 
 import FileBrowser from "~/components/fileBrowser";
 import Copy from "~/components/package/Copy";
@@ -16,7 +17,40 @@ const Packages: NextPage = () => {
   file_path ||= [];
   if (typeof file_path === "string") file_path = [file_path];
 
-  const { data } = api.package.getByName.useQuery(package_name);
+  const [files, setFiles] = useState({});
+
+  const { data } = api.package.getByName.useQuery(package_name, {
+    onSuccess: ({ files }) => setFiles(files),
+  });
+
+  const update = useCallback(
+    (text: string, pointer: string[]) => {
+      setFiles((files) => {
+        let copy: Directory = JSON.parse(JSON.stringify(files));
+
+        function handleNested(
+          current: Directory,
+          pointer: string[],
+          text: string
+        ): Directory {
+          let key = pointer.shift();
+          if (!key) throw new Error("invalid pointer");
+
+          if (pointer.length === 0) {
+            return { ...current, [key]: text };
+          }
+
+          return {
+            ...current,
+            [key]: handleNested(current, pointer, text),
+          };
+        }
+
+        return handleNested(copy, pointer.slice(), text);
+      });
+    },
+    [setFiles]
+  );
 
   const stats = {
     download_count: data?.downloads || 0,
@@ -40,10 +74,11 @@ const Packages: NextPage = () => {
             <Copy package_name={package_name} />
           </div>
         </section>
-        {data?.files && (
+        {files && (
           <FileBrowser
+            update={update}
             package_name={package_name}
-            data={data.files}
+            data={files}
             pointer={file_path}
           />
         )}
