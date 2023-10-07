@@ -6,7 +6,9 @@ export default {
   daisyui: {
     themes: [
       {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         main: {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-var-requires
           ...require("daisyui/src/theming/themes")["[data-theme=lofi]"],
           primary: "#000000", //black
           secondary: "#0EA5E9", // sky-500
@@ -34,41 +36,6 @@ export default {
         title: ["var(--font-title)"],
       },
     },
-
-    hljs: {
-      custom: {
-        base: {
-          background: "#1a1919",
-          color: "#ffffff",
-        },
-        general: {
-          comment: {
-            color: "#64748b",
-          },
-          title: {
-            color: "#a7956e",
-          },
-          params: {
-            color: "#e3e3b5",
-          },
-          string: {
-            color: "#22c55e",
-          },
-          number: {
-            color: "#f89b7a",
-          },
-          keyword: {
-            color: "#8207e7",
-            fontStyle: "italic",
-          },
-          built_in: {
-            color: "#0ea5e9",
-            fontStyle: "italic",
-          },
-          // other general styles
-        },
-      },
-    },
   },
   plugins: [
     require("@tailwindcss/typography"),
@@ -82,11 +49,5 @@ export default {
       });
       addVariant("children", "&>*");
     }),
-    require("tailwind-highlightjs"),
-  ],
-  safelist: [
-    {
-      pattern: /hljs+/,
-    },
   ],
 } satisfies Config;
