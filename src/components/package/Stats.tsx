@@ -8,7 +8,7 @@ interface props {
   updated_at: Date;
 }
 
-let Stats: FC<props> = ({ download_count, created_at, updated_at }) => {
+const Stats: FC<props> = ({ download_count, created_at, updated_at }) => {
   return (
     <div className="stats">
       <div className="stat">

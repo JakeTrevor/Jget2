@@ -3,9 +3,9 @@ import Head from "next/head";
 import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
-  let { data } = api.package.count.useQuery();
+  const { data } = api.package.count.useQuery();
 
-  let pkg_count = data || 0;
+  const pkg_count = data || 0;
 
   return (
     <>
@@ -19,6 +19,7 @@ const Home: NextPage = () => {
           <div className="hero-content flex-col lg:flex-row-reverse">
             <div className="rounded-box flex flex-col bg-primary p-2 font-title text-neutral-content">
               <span className="countdown font-title text-5xl">
+                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                 {/* @ts-ignore */}
                 <span style={{ "--value": pkg_count }}></span>
               </span>

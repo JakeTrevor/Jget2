@@ -13,17 +13,17 @@ export const restRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string(),
-      })
+      }),
     )
     .output(
       z.object({
         name: z.string(),
         files: z.string(),
         dependencies: z.array(z.string()),
-      })
+      }),
     )
     .query(async ({ ctx, input: { name } }) => {
-      let record = await ctx.prisma.package.findUnique({
+      const record = await ctx.prisma.package.findUnique({
         where: {
           name: name,
         },
@@ -31,7 +31,7 @@ export const restRouter = createTRPCRouter({
 
       if (!record) throw new Error("No such package");
 
-      let pkg = await ctx.prisma.package.update({
+      const pkg = await ctx.prisma.package.update({
         where: {
           name: name,
         },
@@ -66,31 +66,31 @@ export const restRouter = createTRPCRouter({
         name: z.string(),
         files: z.string(),
         dependencies: z.array(z.string()),
-      })
+      }),
     )
     .output(
       z.object({
         name: z.string(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
-      let dependency_names = input.dependencies;
-      let data = {
+      const dependency_names = input.dependencies;
+      const data = {
         name: input.name,
         files: input.files,
       };
 
-      let dependencies = await Promise.all(
+      const dependencies = await Promise.all(
         dependency_names.map(async (dep_name) => {
-          let dep = await ctx.prisma.package.findUnique({
+          const dep = await ctx.prisma.package.findUnique({
             where: { name: dep_name },
           });
           if (!dep) throw new Error(`Dependency not found: ${dep_name}`);
           return dep;
-        })
+        }),
       );
 
-      let package_obj = await ctx.prisma.package.upsert({
+      const package_obj = await ctx.prisma.package.upsert({
         where: {
           name: input.name,
         },

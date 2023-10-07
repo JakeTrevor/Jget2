@@ -6,14 +6,14 @@ import Search from "~/icons/search.svg";
 import { newURL, querySchema } from "~/utils/ExplorePageUrlMaker";
 
 const SearchBar: FC = () => {
-  let router = useRouter();
-  let query = querySchema.parse(router.query);
+  const router = useRouter();
+  const query = querySchema.parse(router.query);
 
-  let [search, setSearch] = useState(query.search || "");
+  const [search, setSearch] = useState(query.search || "");
 
-  function go() {
+  async function go() {
     if (!search) return;
-    router.push(newURL(query)({ search }));
+    await router.push(newURL(query)({ search }));
   }
 
   return (
@@ -24,8 +24,8 @@ const SearchBar: FC = () => {
         placeholder="search packages..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") go();
+        onKeyDown={async (e) => {
+          if (e.key === "Enter") await go();
         }}
       />
       <button onClick={go}>

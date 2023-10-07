@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { type NextApiRequest, type NextApiResponse } from "next";
 import { openApiDocument } from "~/server/api/openAPI";
 
 // Respond with our OpenAPI schema

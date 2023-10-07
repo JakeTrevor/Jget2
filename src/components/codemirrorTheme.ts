@@ -1,5 +1,5 @@
-import { createTheme } from "@uiw/codemirror-themes";
 import { tags as t } from "@lezer/highlight";
+import { createTheme } from "@uiw/codemirror-themes";
 
 const jgetDark = createTheme({
   theme: "light",

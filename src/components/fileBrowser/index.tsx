@@ -1,33 +1,39 @@
-import { FC, useState } from "react";
+import Link from "next/link";
+import { useState, type FC } from "react";
 import FileDisplay from "./FileDisplay";
 import FileList from "./FileList";
-import Link from "next/link";
 
+import toast from "react-hot-toast";
 import Back from "~/icons/back.svg";
 import { api } from "~/utils/api";
 interface props {
   data: Directory;
   pointer: string[];
   package_name: string;
+  update: (data: string, pointer: string[]) => void;
 }
 
 function getDir(data: Directory, pointer: string[]) {
   return pointer.reduce(
     (acc: Directory | string, val: string): Directory | string => {
       if (typeof acc === "string") return acc;
-      let result = acc[val];
+      const result = acc[val];
       if (!result) throw Error("lookup failed;");
 
       return result;
     },
-    data
+    data,
   );
 }
 
-let FileBrowser: FC<props> = ({ package_name, data, pointer }) => {
-  let result = getDir(data, pointer);
+const FileBrowser: FC<props> = ({ package_name, data, pointer, update }) => {
+  const [editable, setEditable] = useState(false);
 
-  let backDest =
+  const { mutateAsync } = api.package.updatePackage.useMutation();
+
+  const result = getDir(data, pointer);
+
+  const backDest =
     pointer.length > 0
       ? `/package/${package_name}/${pointer.slice(0, -1).join("/")}`
       : `/package/${package_name}`;
@@ -45,17 +51,42 @@ let FileBrowser: FC<props> = ({ package_name, data, pointer }) => {
               )}
             </li>
             {pointer.map((e, i, arr) => {
-              if (i === arr.length - 1) return <li>{e}</li>;
-              let path = arr.slice(0, i + 1).join("/");
+              if (i === arr.length - 1) return <li key={e}>{e}</li>;
+              const path = arr.slice(0, i + 1).join("/");
 
               return (
-                <li>
+                <li key={e}>
                   <Link href={`/package/${package_name}/${path}`}>{e}</Link>
                 </li>
               );
             })}
           </ul>
         </div>
+
+        {typeof result === "string" &&
+          (editable ? (
+            <button
+              onClick={() =>
+                toast
+                  .promise(mutateAsync({ name: package_name, data }), {
+                    loading: "Saving...",
+                    success: "Saved!",
+                    error: "something went wrong",
+                  })
+                  .then(() => setEditable(false))
+              }
+              className="btn ml-auto mr-10 bg-accent"
+            >
+              save
+            </button>
+          ) : (
+            <button
+              onClick={() => setEditable(true)}
+              className="btn ml-auto mr-10 bg-accent"
+            >
+              edit
+            </button>
+          ))}
 
         <Link
           className={`transition-all ${
@@ -71,6 +102,8 @@ let FileBrowser: FC<props> = ({ package_name, data, pointer }) => {
       </div>
       {typeof result === "string" ? (
         <FileDisplay
+          update={update}
+          editable={editable}
           data={result}
           pointer={pointer}
           file_name={pointer.at(-1) || ""}
