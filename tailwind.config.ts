@@ -7,7 +7,7 @@ export default {
     themes: [
       {
         main: {
-          ...require("daisyui/src/colors/themes")["[data-theme=lofi]"],
+          ...require("daisyui/src/theming/themes")["[data-theme=lofi]"],
           primary: "#000000", //black
           secondary: "#0EA5E9", // sky-500
           accent: "#84CC16", // lime-500 (grass)

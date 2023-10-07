@@ -1,5 +1,5 @@
 {
-  "cSpell.words": ["hljs", "JGET", "nextjs", "openapi"],
+  "cSpell.words": ["codemirror", "hljs", "JGET", "lezer", "nextjs", "openapi"],
   "material-icon-theme.folders.associations": {
     "fileBrowser": "dist",
     "trpc": "routes"

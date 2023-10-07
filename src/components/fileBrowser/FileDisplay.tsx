@@ -1,9 +1,8 @@
 import { FC } from "react";
-import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import Markdown from "react-markdown";
 
+import { langs } from "@uiw/codemirror-extensions-langs";
 import ReactCodeMirror from "@uiw/react-codemirror";
-import { lua } from "@codemirror/legacy-modes/mode/lua";
-import { StreamLanguage } from "@codemirror/language";
 import { EditorView } from "codemirror";
 
 import jgetDark from "../codemirrorTheme";
@@ -25,7 +24,7 @@ let FileDisplay: FC<props> = ({
 }) => {
   let lang = getExtension(file_name);
 
-  // TODO also add a markdown language thingy
+  // TODO also add a languages
 
   if (editable)
     return (
@@ -35,7 +34,7 @@ let FileDisplay: FC<props> = ({
         onChange={(e) => {
           update(e, pointer);
         }}
-        extensions={[StreamLanguage.define(lua), EditorView.lineWrapping]}
+        extensions={[EditorView.lineWrapping, langs.lua()]}
       />
     );
 
@@ -43,18 +42,16 @@ let FileDisplay: FC<props> = ({
     <>
       {lang === "md" ? (
         <div className="prose m-5 max-w-full rounded bg-base-200 p-2 prose-pre:bg-code">
-          <ReactMarkdown
+          <Markdown
             components={{
-              code({ inline, children }) {
-                return !inline ? (
+              code: ({ children, className }) => {
+                const match = /language-(\w+)/.exec(className || "");
+                return match ? (
                   <ReactCodeMirror
                     readOnly={true}
                     value={String(children)}
                     theme={jgetDark}
-                    extensions={[
-                      StreamLanguage.define(lua),
-                      EditorView.lineWrapping,
-                    ]}
+                    extensions={[EditorView.lineWrapping, langs.lua()]}
                   />
                 ) : (
                   <code>{children}</code>
@@ -63,14 +60,14 @@ let FileDisplay: FC<props> = ({
             }}
           >
             {data}
-          </ReactMarkdown>
+          </Markdown>
         </div>
       ) : (
         <ReactCodeMirror
           readOnly={true}
           value={data}
           theme={jgetDark}
-          extensions={[StreamLanguage.define(lua), EditorView.lineWrapping]}
+          extensions={[EditorView.lineWrapping, langs.lua()]}
         />
       )}
     </>
