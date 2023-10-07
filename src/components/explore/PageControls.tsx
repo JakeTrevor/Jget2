@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { FC } from "react";
 
-import { exploreQuery, newURL } from "~/utils/ExplorePageUrlMaker";
+import { newURL, type exploreQuery } from "~/utils/ExplorePageUrlMaker";
 
 interface props {
   num_pages: number;
@@ -9,7 +9,7 @@ interface props {
 }
 
 export const PageControls: FC<props> = ({ num_pages: max, query }) => {
-  let page = query.page || 1;
+  const page = query.page ?? 1;
   let page_numbers = [page - 2, page - 1, page, page + 1, page + 2];
 
   if (page === 1) {
@@ -24,11 +24,11 @@ export const PageControls: FC<props> = ({ num_pages: max, query }) => {
 
   page_numbers = page_numbers.filter((e) => e <= max && e > 0);
 
-  let redirectTo = newURL(query);
+  const redirectTo = newURL(query);
 
   return (
     <div className="btn-group m-2 font-title">
-      <Link href={redirectTo({ page: 1 })} className="btn-outline btn w-16 p-4">
+      <Link href={redirectTo({ page: 1 })} className="btn btn-outline w-16 p-4">
         First
       </Link>
       {page_numbers.map((e) => {
@@ -36,7 +36,7 @@ export const PageControls: FC<props> = ({ num_pages: max, query }) => {
           <Link
             key={e}
             href={redirectTo({ page: e })}
-            className={`btn-outline btn ${
+            className={`btn btn-outline ${
               e === page ? "bg-lime-500/30 text-lime-700" : ""
             }`}
           >
@@ -46,7 +46,7 @@ export const PageControls: FC<props> = ({ num_pages: max, query }) => {
       })}
       <Link
         href={redirectTo({ page: max })}
-        className="btn-outline btn w-16 p-4"
+        className="btn btn-outline w-16 p-4"
       >
         Last
       </Link>
@@ -57,11 +57,11 @@ export const PageControls: FC<props> = ({ num_pages: max, query }) => {
 export const PageControlsLoading: FC = () => {
   return (
     <div className="btn-group m-2 animate-pulse rounded-md bg-slate-200 font-title">
-      <div className="btn-outline btn w-16 p-4" />
-      {Array.from(Array(5)).map((_) => {
-        return <div className="btn-outline btn" />;
+      <div className="btn btn-outline w-16 p-4" />
+      {[...Array(5).keys()].map((_, i) => {
+        return <div key={i} className="btn btn-outline" />;
       })}
-      <div className="btn-outline btn w-16 animate-pulse rounded-md bg-slate-200 p-4" />
+      <div className="btn btn-outline w-16 animate-pulse rounded-md bg-slate-200 p-4" />
     </div>
   );
 };

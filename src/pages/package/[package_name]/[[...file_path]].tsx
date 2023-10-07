@@ -9,31 +9,34 @@ import Stats from "~/components/package/Stats";
 import { api } from "~/utils/api";
 
 const Packages: NextPage = () => {
+  const [files, setFiles] = useState({});
   const router = useRouter();
-  let { package_name, file_path } = router.query;
 
-  if (typeof package_name !== "string") return <>invalid package name</>; //theoretical error
+  // * This makes me hurt
+  // eslint-disable-next-line prefer-const
+  let { package_name, file_path } = router.query;
 
   file_path ||= [];
   if (typeof file_path === "string") file_path = [file_path];
 
-  const [files, setFiles] = useState({});
-
-  const { data } = api.package.getByName.useQuery(package_name, {
-    onSuccess: ({ files }) => setFiles(files),
-  });
+  const { data } = api.package.getByName.useQuery(
+    (package_name || "") as string,
+    {
+      onSuccess: ({ files }) => setFiles(files),
+    },
+  );
 
   const update = useCallback(
     (text: string, pointer: string[]) => {
       setFiles((files) => {
-        let copy: Directory = JSON.parse(JSON.stringify(files));
+        const copy = JSON.parse(JSON.stringify(files)) as Directory;
 
         function handleNested(
           current: Directory,
           pointer: string[],
-          text: string
+          text: string,
         ): Directory {
-          let key = pointer.shift();
+          const key = pointer.shift();
           if (!key) throw new Error("invalid pointer");
 
           if (pointer.length === 0) {
@@ -49,7 +52,7 @@ const Packages: NextPage = () => {
         return handleNested(copy, pointer.slice(), text);
       });
     },
-    [setFiles]
+    [setFiles],
   );
 
   const stats = {
@@ -57,6 +60,8 @@ const Packages: NextPage = () => {
     created_at: data?.createdAt || new Date(),
     updated_at: data?.updatedAt || new Date(),
   };
+
+  if (typeof package_name !== "string") return <>invalid package name</>; //theoretical error
 
   return (
     <>

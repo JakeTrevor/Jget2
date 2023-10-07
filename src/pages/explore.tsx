@@ -13,11 +13,11 @@ import { querySchema } from "~/utils/ExplorePageUrlMaker";
 import { api } from "~/utils/api";
 
 const Packages: NextPage = () => {
-  let router = useRouter();
+  const router = useRouter();
 
-  let query = querySchema.parse(router.query);
+  const query = querySchema.parse(router.query);
 
-  let { data, status } = api.package.getList.useQuery(query);
+  const { data, status } = api.package.getList.useQuery(query);
 
   if (status === "error")
     return (
@@ -26,7 +26,7 @@ const Packages: NextPage = () => {
       </main>
     );
 
-  let { packages, num_pages } = data || { packages: [], num_pages: 0 };
+  const { packages, num_pages } = data || { packages: [], num_pages: 0 };
 
   return (
     <main className="grid w-full grid-cols-4 gap-4 bg-base-200 p-10">
@@ -37,7 +37,9 @@ const Packages: NextPage = () => {
       <ul className="rounded-box col-span-2 row-span-2 flex h-[60vh] w-full flex-col flex-nowrap justify-start bg-base-100 p-2">
         {packages.length
           ? packages.map((pkg, i) => <PackageListing data={pkg} key={i} />)
-          : Array.from("xxxxx").map((_) => <PackageListingLoading />)}
+          : [...Array(5).keys()].map((_, i) => (
+              <PackageListingLoading key={i} />
+            ))}
       </ul>
       <div className="col-span-2 col-start-2 flex items-center justify-center">
         {status === "success" ? (

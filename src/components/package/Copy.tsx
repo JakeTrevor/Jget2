@@ -5,7 +5,7 @@ interface props {
   package_name: string;
 }
 
-let component: FC<props> = ({ package_name }) => {
+const component: FC<props> = ({ package_name }) => {
   return (
     <div>
       <h4 className="font-semibold italic">Install this package:</h4>

@@ -1,11 +1,11 @@
-import { FC, useState } from "react";
+import Link from "next/link";
+import { useState, type FC } from "react";
 import FileDisplay from "./FileDisplay";
 import FileList from "./FileList";
-import Link from "next/link";
 
+import toast from "react-hot-toast";
 import Back from "~/icons/back.svg";
 import { api } from "~/utils/api";
-import toast from "react-hot-toast";
 interface props {
   data: Directory;
   pointer: string[];
@@ -17,23 +17,23 @@ function getDir(data: Directory, pointer: string[]) {
   return pointer.reduce(
     (acc: Directory | string, val: string): Directory | string => {
       if (typeof acc === "string") return acc;
-      let result = acc[val];
+      const result = acc[val];
       if (!result) throw Error("lookup failed;");
 
       return result;
     },
-    data
+    data,
   );
 }
 
-let FileBrowser: FC<props> = ({ package_name, data, pointer, update }) => {
+const FileBrowser: FC<props> = ({ package_name, data, pointer, update }) => {
   const [editable, setEditable] = useState(false);
 
-  let { mutateAsync } = api.package.updatePackage.useMutation();
+  const { mutateAsync } = api.package.updatePackage.useMutation();
 
-  let result = getDir(data, pointer);
+  const result = getDir(data, pointer);
 
-  let backDest =
+  const backDest =
     pointer.length > 0
       ? `/package/${package_name}/${pointer.slice(0, -1).join("/")}`
       : `/package/${package_name}`;
@@ -51,11 +51,11 @@ let FileBrowser: FC<props> = ({ package_name, data, pointer, update }) => {
               )}
             </li>
             {pointer.map((e, i, arr) => {
-              if (i === arr.length - 1) return <li>{e}</li>;
-              let path = arr.slice(0, i + 1).join("/");
+              if (i === arr.length - 1) return <li key={e}>{e}</li>;
+              const path = arr.slice(0, i + 1).join("/");
 
               return (
-                <li>
+                <li key={e}>
                   <Link href={`/package/${package_name}/${path}`}>{e}</Link>
                 </li>
               );

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export let querySchema = z.object({
+export const querySchema = z.object({
   page: z.coerce.number().optional(),
   search: z.coerce.string().optional(),
   sorting: z.optional(z.string()).transform((str) => {
@@ -16,14 +16,14 @@ export let querySchema = z.object({
 
 export type exploreQuery = z.infer<typeof querySchema>;
 
-export let exploreDefaults = {
+export const exploreDefaults = {
   page: 1,
   sorting: "downloads",
   order: "desc",
 };
 
-export let newURL = (oldQuery: exploreQuery) => (newQuery: exploreQuery) => {
-  let url = {
+export const newURL = (oldQuery: exploreQuery) => (newQuery: exploreQuery) => {
+  const url = {
     pathname: "/explore/",
     query: {
       ...oldQuery,

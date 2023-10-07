@@ -1,22 +1,22 @@
 import { useRouter } from "next/router";
 import type { FC } from "react";
-import {
-  exploreDefaults,
-  exploreQuery,
-  newURL,
-} from "~/utils/ExplorePageUrlMaker";
 import Ascending from "~/icons/ascending.svg";
 import Descending from "~/icons/descending.svg";
+import {
+  exploreDefaults,
+  newURL,
+  type exploreQuery,
+} from "~/utils/ExplorePageUrlMaker";
 
 interface props {
   query: exploreQuery;
 }
 
 const FilterControls: FC<props> = ({ query: Q }) => {
-  let query = { ...exploreDefaults, ...Q };
-  let router = useRouter();
+  const query = { ...exploreDefaults, ...Q };
+  const router = useRouter();
 
-  let redirectTo = (newQ: exploreQuery) => () => router.push(newURL(Q)(newQ));
+  const redirectTo = (newQ: exploreQuery) => () => router.push(newURL(Q)(newQ));
 
   return (
     <div className="rounded-box flex h-full w-full flex-col bg-base-100 p-4">
@@ -43,7 +43,7 @@ const FilterControls: FC<props> = ({ query: Q }) => {
           <input
             type="radio"
             name="radio-10"
-            checked={query.sorting === "name"}
+            defaultChecked={query.sorting === "name"}
             className="radio checked:bg-secondary"
             onClick={redirectTo({ sorting: "name" })}
           />
@@ -55,7 +55,7 @@ const FilterControls: FC<props> = ({ query: Q }) => {
           <input
             type="radio"
             name="radio-10"
-            checked={query.sorting === "downloads"}
+            defaultChecked={query.sorting === "downloads"}
             className="radio checked:bg-secondary"
             onClick={redirectTo({ sorting: "downloads" })}
           />
@@ -67,7 +67,7 @@ const FilterControls: FC<props> = ({ query: Q }) => {
           <input
             type="radio"
             name="radio-10"
-            checked={query.sorting === "updatedAt"}
+            defaultChecked={query.sorting === "updatedAt"}
             className="radio checked:bg-secondary"
             onClick={redirectTo({ sorting: "updatedAt" })}
           />

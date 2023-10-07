@@ -1,9 +1,9 @@
 import Head from "next/head";
 import type { FC, ReactNode } from "react";
-import Header from "./header";
 import { Toaster } from "react-hot-toast";
+import Header from "./header";
 
-let Layout: FC<{ children: ReactNode }> = ({ children }) => {
+const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <>
       <Toaster />

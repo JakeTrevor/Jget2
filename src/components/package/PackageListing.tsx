@@ -1,4 +1,4 @@
-import { Package } from "@prisma/client";
+import { type Package } from "@prisma/client";
 import Link from "next/link";
 import type { FC } from "react";
 
@@ -6,7 +6,7 @@ interface props {
   data: Package;
 }
 
-let PackageListing: FC<props> = ({
+const PackageListing: FC<props> = ({
   data: { name, downloads, createdAt, updatedAt },
 }) => {
   return (

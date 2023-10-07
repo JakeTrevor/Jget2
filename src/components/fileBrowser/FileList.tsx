@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FC, useEffect } from "react";
+import { Fragment, type FC } from "react";
 import Icon from "./Icon";
 
 interface props {
@@ -8,19 +8,15 @@ interface props {
   package_name: string;
 }
 
-let FileList: FC<props> = ({ package_name, pointer, data }) => {
-  let keys = Object.keys(data)
+const FileList: FC<props> = ({ package_name, pointer, data }) => {
+  const keys = Object.keys(data)
     .sort()
     .sort((a, b) => {
-      let valA = typeof data[a] === "string" ? 0 : 1;
-      let valB = typeof data[b] === "string" ? 0 : 1;
+      const valA = typeof data[a] === "string" ? 0 : 1;
+      const valB = typeof data[b] === "string" ? 0 : 1;
       return valB - valA;
     });
   //sorting twice - first to get alphabetical, second to get folders to top
-
-  useEffect(() => {
-    console.log(keys);
-  });
 
   return (
     <section className="mb-2 grid w-full grid-cols-3 gap-y-2 sm:grid-cols-7 md:grid-cols-6 lg:grid-cols-9 xl:grid-cols-12">
@@ -31,17 +27,22 @@ let FileList: FC<props> = ({ package_name, pointer, data }) => {
         File Name
       </p>
       {keys.map((key) => (
-        <>
-          <div className="col-span-1 flex items-center justify-end pr-2">
+        <Fragment key={key}>
+          <div
+            className="col-span-1 flex items-center justify-end pr-2"
+            key={`${key}-icon`}
+          >
             <Icon data={data} item={key} />
           </div>
           <Link
+            key={`${key}-link`}
             className="link-hover link col-span-2 pl-2 sm:col-span-6 md:col-span-5 lg:col-span-8 xl:col-span-11"
-            href={`/package/${package_name}/${pointer.join("/")}/${key}`}
+            href={`/package/${package_name}/${pointer.concat(key).join("/")}`}
+            // This is malformed ^
           >
             {key}
           </Link>
-        </>
+        </Fragment>
       ))}
     </section>
   );

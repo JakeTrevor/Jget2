@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { useState, type FC } from "react";
 import Clipboard from "~/icons/clipboard.svg";
 import Tick from "~/icons/tick.svg";
 
@@ -6,8 +6,8 @@ interface props {
   text: string;
 }
 
-let CopyButton: FC<props> = ({ text }) => {
-  let [recent, setRecent] = useState(false);
+const CopyButton: FC<props> = ({ text }) => {
+  const [recent, setRecent] = useState(false);
 
   return (
     <button
@@ -15,8 +15,8 @@ let CopyButton: FC<props> = ({ text }) => {
       className={`tooltip ${
         recent ? "tooltip-open" : ""
       } p-1 transition-transform active:-translate-y-2 `}
-      onClick={() => {
-        navigator.clipboard.writeText(text);
+      onClick={async () => {
+        await navigator.clipboard.writeText(text);
         setRecent(true);
 
         setTimeout(() => {

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { type FC } from "react";
 import Markdown from "react-markdown";
 
 import { langs } from "@uiw/codemirror-extensions-langs";
@@ -15,14 +15,14 @@ interface props {
   update: (data: string, pointer: string[]) => void;
 }
 
-let FileDisplay: FC<props> = ({
+const FileDisplay: FC<props> = ({
   data,
   file_name,
   editable,
   pointer,
   update,
 }) => {
-  let lang = getExtension(file_name);
+  const lang = getExtension(file_name);
 
   // TODO also add a languages
 
@@ -45,7 +45,7 @@ let FileDisplay: FC<props> = ({
           <Markdown
             components={{
               code: ({ children, className }) => {
-                const match = /language-(\w+)/.exec(className || "");
+                const match = /language-(\w+)/.exec(className ?? "");
                 return match ? (
                   <ReactCodeMirror
                     readOnly={true}
