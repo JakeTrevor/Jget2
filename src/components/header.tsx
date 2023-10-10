@@ -1,5 +1,6 @@
 import Link from "next/link";
 import SearchBar from "./SearchBar";
+import AuthBadge from "./AuthBadge";
 
 const Header = () => {
   return (
@@ -17,6 +18,7 @@ const Header = () => {
         <h3 className="text-xl">explore</h3>
       </Link>
       <SearchBar />
+      <AuthBadge />
     </header>
   );
 };
