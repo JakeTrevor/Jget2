@@ -23,17 +23,19 @@ export const exploreDefaults = {
 };
 
 export const newURL = (oldQuery: exploreQuery) => (newQuery: exploreQuery) => {
-  const url = {
-    pathname: "/explore/",
-    query: {
-      ...oldQuery,
-      ...newQuery,
-    },
+  const query = {
+    ...oldQuery,
+    ...newQuery,
   };
 
-  if (url.query.sorting === "downloads") delete url.query.sorting;
-  if (url.query.order === "desc") delete url.query.order;
-  if (url.query.page === 1) delete url.query.page;
+  if (query.sorting === "downloads") delete query.sorting;
+  if (query.order === "desc") delete query.order;
+  if (query.page === 1) delete query.page;
 
-  return url;
+  const url = new URL("https://example.com/explore");
+  for (const [k, v] of Object.entries(query)) {
+    url.searchParams.append(k, v.toString());
+  }
+
+  return url.pathname + url.search;
 };
