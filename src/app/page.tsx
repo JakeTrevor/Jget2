@@ -13,7 +13,7 @@ export default async function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex flex-col">
-        <section className="grid min-h-[93vh] place-items-center bg-zinc-200 dark:bg-zinc-800">
+        <section className="grid min-h-[93vh] place-items-center bg-accent">
           <div className="flex flex-col items-center gap-2 lg:flex-row-reverse">
             <PackageCount count={pkg_count} />
             <div>
@@ -32,7 +32,7 @@ export default async function Home() {
           <h3 className="mb-8 text-3xl font-bold">Why use JGET?</h3>
           <div className="grid grid-cols-1 gap-x-1 gap-y-3 lg:grid-cols-2">
             <div className="inline">
-              <h4 className="inline font-title text-sky-500 lg:text-lime-500">
+              <h4 className="text-sky-500 inline font-title lg:text-lime-500">
                 Move Code{" "}
               </h4>
               seamlessly between computers

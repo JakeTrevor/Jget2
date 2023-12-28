@@ -1,19 +1,19 @@
-import type { FC } from "react";
+import { ChevronsDown } from "lucide-react";
 
-import Downloads from "~/icons/downloads.svg";
-
-interface props {
+export const Stats = ({
+  download_count,
+  created_at,
+  updated_at,
+}: {
   download_count: number;
   created_at: Date;
   updated_at: Date;
-}
-
-const Stats: FC<props> = ({ download_count, created_at, updated_at }) => {
+}) => {
   return (
     <div className="stats">
       <div className="stat">
         <div className="stat-figure text-primary">
-          <Downloads width={30} />
+          <ChevronsDown width={30} />
         </div>
         <div className="stat-title">Downloads</div>
         <div className="stat-value text-primary">{download_count}</div>
@@ -33,5 +33,3 @@ const Stats: FC<props> = ({ download_count, created_at, updated_at }) => {
     </div>
   );
 };
-
-export default Stats;

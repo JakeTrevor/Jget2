@@ -1,6 +1,6 @@
 import "~/styles/globals.css";
 
-import { Inter } from "next/font/google";
+import { Inter, Source_Code_Pro } from "next/font/google";
 import { cookies } from "next/headers";
 import { Toaster } from "react-hot-toast";
 import localFont from "next/font/local";
@@ -22,6 +22,11 @@ const inter = Inter({
   variable: "--font-sans",
 });
 
+const scp = Source_Code_Pro({
+  subsets: ["latin"],
+  variable: "--font-code",
+});
+
 export const metadata = {
   title: "JGET",
   description: "JGET Package Manager",
@@ -40,6 +45,7 @@ export default function RootLayout({
           "min-h-screen bg-background font-sans antialiased",
           title.variable,
           inter.variable,
+          scp.variable,
         )}
       >
         <ThemeProvider
