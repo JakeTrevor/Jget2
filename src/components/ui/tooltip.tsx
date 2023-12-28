@@ -30,13 +30,17 @@ TooltipContent.displayName = TooltipPrimitive.Content.displayName;
 const Tooltip = ({
   children,
   tip,
+  delay = 700,
+  open,
 }: {
   children: React.ReactNode;
   tip: string;
+  delay?: number;
+  open?: boolean;
 }) => {
   return (
-    <TooltipProvider>
-      <TooltipRoot>
+    <TooltipProvider delayDuration={delay}>
+      <TooltipRoot open={open}>
         <TooltipTrigger asChild>{children}</TooltipTrigger>
         <TooltipContent>
           <p>{tip}</p>

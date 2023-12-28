@@ -21,8 +21,17 @@ const config = {
       fontFamily: {
         title: ["var(--font-title)"],
         sans: ["var(--font-sans)", ...fontFamily.sans],
+        code: ["var(--font-code)"],
       },
       colors: {
+        sky: "#0EA5E9", // sky-500
+        grass: "#84CC16", // lime-500 (grass)
+        stone: "#64748B", // slate-500 (stone)
+        success: "#21CC51", // ?
+        sand: "#E3E3B5", // "sand"
+        redstone: "#dc2626", // red-600 "redstone",
+        code: "#1a1919",
+
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

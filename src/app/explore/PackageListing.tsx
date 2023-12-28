@@ -6,13 +6,13 @@ interface props {
   data: Package;
 }
 
-const PackageListing: FC<props> = ({
+export const PackageListing: FC<props> = ({
   data: { name, downloads, createdAt, updatedAt },
 }) => {
   return (
     <Link
       href={`/package/${name}/`}
-      className="grid h-[12vh] grid-cols-3 rounded-sm px-2 py-1 transition-all duration-300 hover:scale-105 hover:bg-base-300"
+      className="grid h-[12vh] grid-cols-3 rounded-sm bg-background px-2 py-1 transition-all duration-300 hover:z-10 hover:scale-105 hover:shadow-md"
     >
       <h2 className="col-span-3 text-lg font-bold">{name}</h2>
       <p>created: {createdAt.toLocaleDateString()}</p>
@@ -30,5 +30,3 @@ export const PackageListingLoading = () => (
     <p className="m-5 mr-0 animate-pulse rounded-md bg-slate-200" />
   </div>
 );
-
-export default PackageListing;

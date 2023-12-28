@@ -19,7 +19,7 @@ const SearchBar: FC = () => {
 
   async function go() {
     if (!search) return;
-    router.push(newURL(query)({ search }));
+    router.push(newURL(query, { search }));
   }
 
   return (
@@ -34,7 +34,7 @@ const SearchBar: FC = () => {
         }}
       />
       <Tooltip tip="search">
-        <Button onClick={go}>
+        <Button onClick={go} size="icon">
           <Search width="15" className="m-2 inline" />
         </Button>
       </Tooltip>

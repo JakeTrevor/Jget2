@@ -22,7 +22,7 @@ export const exploreDefaults = {
   order: "desc",
 };
 
-export const newURL = (oldQuery: exploreQuery) => (newQuery: exploreQuery) => {
+export const newURL = (oldQuery: exploreQuery, newQuery: exploreQuery) => {
   const query = {
     ...oldQuery,
     ...newQuery,
