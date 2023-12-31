@@ -1,17 +1,16 @@
-import Head from "next/head";
+import { type Metadata } from "next";
 import { api } from "~/trpc/server";
 import { PackageCount } from "./pkgCount";
+
+export const metadata: Metadata = {
+  title: "JGET",
+  description: "JGET Package Manager"
+}
 
 export default async function Home() {
   const pkg_count = await api.package.count.query();
 
   return (
-    <>
-      <Head>
-        <title>JGET</title>
-        <meta name="description" content="JGET Package Manager" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <main className="flex flex-col">
         <section className="grid min-h-[93vh] place-items-center bg-accent">
           <div className="flex flex-col items-center gap-2 lg:flex-row-reverse">
@@ -54,6 +53,5 @@ export default async function Home() {
           </div>
         </section>
       </main>
-    </>
   );
 }

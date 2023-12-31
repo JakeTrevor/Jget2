@@ -1,10 +1,24 @@
-import Head from "next/head";
-import { api } from "~/trpc/server";
-import { Stats } from "./Stats";
-import { CopyPackage } from "./Copy";
+import type { Metadata, ResolvingMetadata } from 'next';
 import { Separator } from "~/components/ui/separator";
+import { api } from "~/trpc/server";
+import { CopyPackage } from "./Copy";
+import { Stats } from "./Stats";
 
-export default async function Package({
+
+export async function generateMetadata(
+  { params: {package_name:packageName} }: {
+    params: { package_name: string; file_path: string[] };
+  },
+  _parent: ResolvingMetadata
+): Promise<Metadata> {
+  return {
+    title: `JGET | ${packageName}`,
+    description: "JGET Package Manager"
+  }
+}
+
+
+export default async function Package({ 
   params: { package_name: packageName, file_path: filePath = [] },
 }: {
   params: { package_name: string; file_path: string[] };
@@ -52,11 +66,7 @@ export default async function Package({
 
   return (
     <>
-      <Head>
-        <title>JGET | {packageName}</title>
-        <meta name="description" content="JGET Package Manager" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+
       <main className="flex min-h-[93vh] flex-col items-center bg-accent">
         <section className="my-10 w-3/4">
           <h2 className="text-3xl font-bold">{packageName}</h2>
