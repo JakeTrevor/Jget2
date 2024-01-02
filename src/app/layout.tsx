@@ -7,7 +7,7 @@ import localFont from "next/font/local";
 
 import { TRPCReactProvider } from "~/trpc/react";
 
-import Header from "./header";
+import { Header } from "./header";
 import { cn } from "~/lib/utils";
 import { ThemeProvider } from "~/components/ui/theme";
 

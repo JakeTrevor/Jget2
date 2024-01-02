@@ -1,9 +1,9 @@
 import Link from "next/link";
-import SearchBar from "../components/SearchBar";
+import SearchBar from "~/components/SearchBar";
 import { Button } from "~/components/ui/button";
 import { ThemeToggle } from "~/components/ui/theme";
 
-const Header = () => {
+export const Header = () => {
   return (
     <header className="sticky top-0 z-10 flex h-[7vh] flex-row items-center gap-1 bg-background py-3">
       <Button asChild variant="ghost">
@@ -21,5 +21,3 @@ const Header = () => {
     </header>
   );
 };
-
-export default Header;
