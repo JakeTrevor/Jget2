@@ -1,15 +1,14 @@
 import "~/styles/globals.css";
 
 import { Inter, Source_Code_Pro } from "next/font/google";
+import localFont from "next/font/local";
 import { cookies } from "next/headers";
 import { Toaster } from "react-hot-toast";
-import localFont from "next/font/local";
 
 import { TRPCReactProvider } from "~/trpc/react";
 
-import { Header } from "./header";
-import { cn } from "~/lib/utils";
 import { ThemeProvider } from "~/components/ui/theme";
+import { cn } from "~/lib/utils";
 
 const title = localFont({
   src: "../fonts/title.ttf",
@@ -56,7 +55,6 @@ export default function RootLayout({
         >
           <TRPCReactProvider cookies={cookies().toString()}>
             <Toaster />
-            <Header />
             {children}
           </TRPCReactProvider>
         </ThemeProvider>
