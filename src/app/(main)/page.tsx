@@ -12,8 +12,8 @@ export default async function Home() {
 
   return (
     <main className="flex flex-col">
-      <section className="grid min-h-[93vh] place-items-center bg-accent">
-        <div className="flex flex-col items-center gap-2 lg:flex-row-reverse">
+      <section className="bg-body grid min-h-[93vh] place-items-center">
+        <div className="flex flex-col items-center gap-2 rounded-lg bg-background/20 p-5 shadow-lg lg:flex-row-reverse dark:bg-background/70">
           <PackageCount count={pkg_count} />
           <div>
             <h1 className="text-4xl font-bold">

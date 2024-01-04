@@ -15,7 +15,7 @@ export const FilterControls = ({ query: Q }: { query: exploreQuery }) => {
   const query = { ...exploreDefaults, ...Q };
 
   return (
-    <div className="flex h-full w-full flex-col rounded-md bg-background p-4">
+    <div className="flex h-full w-full flex-col rounded-md bg-background p-4 shadow-lg">
       <h1 className="border-b-2 border-sky p-1 text-2xl">Filter Packages</h1>
       <span className="flex flex-row justify-end">
         <Tooltip tip="sorting asc/desc">

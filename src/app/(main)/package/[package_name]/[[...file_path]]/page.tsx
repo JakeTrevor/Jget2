@@ -1,4 +1,5 @@
 import type { Metadata, ResolvingMetadata } from "next";
+
 import { Separator } from "~/components/ui/separator";
 import { api } from "~/trpc/server";
 import { CopyPackage } from "./Copy";
@@ -58,15 +59,13 @@ export default async function Package({
   //   );
 
   const stats = {
-    download_count: data?.downloads || 0,
-    created_at: data?.createdAt || new Date(),
-    updated_at: data?.updatedAt || new Date(),
+    download_count: data.downloads,
+    created_at: data.createdAt,
+    updated_at: data.updatedAt,
   };
 
-  if (typeof packageName !== "string") return <>invalid package name</>; //theoretical error
-
   return (
-    <main className="flex min-h-[93vh] flex-col items-center bg-accent">
+    <main className="bg-body flex min-h-[93vh] flex-col items-center">
       <section className="my-10 w-3/4">
         <h2 className="text-3xl font-bold">{packageName}</h2>
         <Separator className="my-4 bg-sky" />
@@ -75,13 +74,11 @@ export default async function Package({
           <CopyPackage package_name={packageName} />
         </div>
       </section>
-      {Object.keys(files).length !== 0 && (
-        <FileBrowser
-          package_name={packageName}
-          data={files}
-          pointer={filePath}
-        />
-      )}
+      <FileBrowser
+        package_name={packageName}
+        files={files}
+        pointer={filePath}
+      />
     </main>
   );
 }

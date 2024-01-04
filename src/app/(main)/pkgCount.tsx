@@ -12,7 +12,7 @@ export const PackageCount = ({ count }: { count: number }) => {
   }, []);
 
   return (
-    <div className="flex h-24 w-24 flex-col items-start rounded bg-primary p-2 font-title text-primary-foreground">
+    <div className="flex h-24 w-24 flex-col items-start rounded bg-primary p-2 font-title text-primary-foreground shadow-md">
       <Countdown count={val} minDigits={count.toString().length} />
       <h2 className="text-lg">Packages</h2>
     </div>

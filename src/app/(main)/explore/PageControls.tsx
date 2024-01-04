@@ -30,7 +30,7 @@ export const PageControls = ({
   const mkLink = (page: number) => newURL(query, { page });
 
   return (
-    <Pagination className="w-min rounded-md bg-background p-2">
+    <Pagination className="w-min rounded-md bg-background p-2 shadow-lg">
       <PaginationContent>
         <PaginationItem>
           <PaginationFirst href={mkLink(1)} isActive={isFirstPage} />

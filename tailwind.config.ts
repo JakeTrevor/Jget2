@@ -32,6 +32,8 @@ const config = {
         redstone: "#dc2626", // red-600 "redstone",
         code: "#1a1919",
 
+        body: "hsl(var(--body))",
+
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

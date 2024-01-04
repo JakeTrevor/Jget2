@@ -1,26 +1,21 @@
 import { type Package } from "@prisma/client";
 import Link from "next/link";
-import type { FC } from "react";
 
-interface props {
-  data: Package;
-}
-
-export const PackageListing: FC<props> = ({
+export const PackageListing = ({
   data: { name, downloads, createdAt, updatedAt },
-}) => {
-  return (
-    <Link
-      href={`/package/${name}/`}
-      className="grid h-[12vh] grid-cols-3 rounded-sm bg-background px-2 py-1 transition-all duration-300 hover:z-10 hover:scale-105 hover:shadow-md"
-    >
-      <h2 className="col-span-3 text-lg font-bold">{name}</h2>
-      <p>created: {createdAt.toLocaleDateString()}</p>
-      <p>updated: {updatedAt.toLocaleDateString()}</p>
-      <p className="text-right">{downloads} downloads</p>
-    </Link>
-  );
-};
+}: {
+  data: Package;
+}) => (
+  <Link
+    href={`/package/${name}/`}
+    className="grid h-[12vh] grid-cols-3 rounded-sm bg-background px-2 py-1 transition-all duration-300 hover:z-10 hover:scale-105 hover:shadow-md"
+  >
+    <h2 className="col-span-3 text-lg font-bold">{name}</h2>
+    <p>created: {createdAt.toLocaleDateString()}</p>
+    <p>updated: {updatedAt.toLocaleDateString()}</p>
+    <p className="text-right">{downloads} downloads</p>
+  </Link>
+);
 
 export const PackageListingLoading = () => (
   <div className="grid h-[12vh] animate-pulse grid-cols-3 px-2 py-1">

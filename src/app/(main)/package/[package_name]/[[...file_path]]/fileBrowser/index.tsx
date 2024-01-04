@@ -1,11 +1,8 @@
-import { FolderUp } from "lucide-react";
-import Link from "next/link";
+import { Breadcrumbs } from "~/components/breadcrumbs";
 
+import { BackButton } from "./BackButton";
 import { FileDisplay } from "./FileDisplay";
 import { FileList } from "./FileList";
-import { Breadcrumbs } from "~/components/breadcrumbs";
-import { Button } from "~/components/ui/button";
-import { Tooltip } from "~/components/ui/tooltip";
 
 function getDir(data: Directory, pointer: string[]) {
   return pointer.reduce(
@@ -22,31 +19,20 @@ function getDir(data: Directory, pointer: string[]) {
 
 export const FileBrowser = ({
   package_name,
-  data,
+  files,
   pointer,
 }: {
-  data: Directory;
+  files: Directory;
   pointer: string[];
   package_name: string;
 }) => {
-  const result = getDir(data, pointer);
-
-  const backDest =
-    pointer.length > 0
-      ? `/package/${package_name}/${pointer.slice(0, -1).join("/")}`
-      : `/package/${package_name}`;
+  const result = getDir(files, pointer);
 
   return (
     <section className="mb-20 min-h-[50vh] w-3/4 overflow-hidden rounded-md bg-background text-foreground shadow-xl">
       <div className="flex flex-row items-baseline justify-between border-b border-white p-5">
         <Breadcrumbs base={`/package/${package_name}/`} path={pointer} />
-        <Tooltip tip="back">
-          <Button variant="ghost" asChild>
-            <Link href={backDest}>
-              <FolderUp size={15} />
-            </Link>
-          </Button>
-        </Tooltip>
+        <BackButton pointer={pointer} package_name={package_name} />
       </div>
       {typeof result === "string" ? (
         <FileDisplay data={result} file_name={pointer.at(-1) ?? ""} />
