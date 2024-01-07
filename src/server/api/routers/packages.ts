@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { type Directory } from "~/types";
 
 const PAGE_SIZE = 5;
 

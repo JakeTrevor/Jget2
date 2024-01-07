@@ -1,30 +1,17 @@
-"use client";
+import { api } from "~/trpc/server";
 
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "~/components/ui/resizable";
-import { useToggle } from "~/lib/useToggle";
+import { Display } from "./display";
 
-import { Editor } from "./editor";
-import { Header } from "./header";
-import { Sidebar } from "./sidebar";
+export default async function EditPage({
+  params: { package_name: packageName },
+}: {
+  params: { package_name: string };
+}) {
+  const data = await api.package.getByName.query(packageName);
 
-export default function EditPage() {
-  const [sidebarOpen, toggleSidebar] = useToggle(true);
   return (
     <main>
-      <Header sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
-      <ResizablePanelGroup direction="horizontal">
-        <ResizablePanel defaultSize={10}>
-          <Sidebar />
-        </ResizablePanel>
-        <ResizableHandle />
-        <ResizablePanel defaultSize={90}>
-          <Editor />
-        </ResizablePanel>
-      </ResizablePanelGroup>
+      <Display files={data.files} />
     </main>
   );
 }

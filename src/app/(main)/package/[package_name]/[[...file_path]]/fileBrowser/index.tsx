@@ -3,6 +3,7 @@ import { Breadcrumbs } from "~/components/breadcrumbs";
 import { BackButton } from "./BackButton";
 import { FileDisplay } from "./FileDisplay";
 import { FileList } from "./FileList";
+import { type Directory } from "~/types";
 
 function getDir(data: Directory, pointer: string[]) {
   return pointer.reduce(

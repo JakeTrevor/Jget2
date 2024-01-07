@@ -6,18 +6,10 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { ThemeToggleSubmenu } from "~/components/ui/theme";
-import { SidebarToggle } from "./SidebarToggle";
 
-export function Header({
-  sidebarOpen,
-  toggleSidebar,
-}: {
-  sidebarOpen: boolean;
-  toggleSidebar: () => void;
-}) {
+export function Header() {
   return (
     <header className="width-full h-[5vh] bg-accent text-foreground">
-      <SidebarToggle open={sidebarOpen} toggle={toggleSidebar} />
       <DropdownMenu>
         <DropdownMenuTrigger>JGET</DropdownMenuTrigger>
         <DropdownMenuContent>
