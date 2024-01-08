@@ -26,51 +26,15 @@ export default async function Package({
   params: { package_name: string; file_path: string[] };
 }) {
   const data = await api.package.getByName.query(packageName);
-
   const { files } = data;
 
-  //   const update = useCallback(
-  //     (text: string, pointer: string[]) => {
-  //       setFiles((files) => {
-  //         const copy = JSON.parse(JSON.stringify(files)) as Directory;
-
-  //         function handleNested(
-  //           current: Directory,
-  //           pointer: string[],
-  //           text: string,
-  //         ): Directory {
-  //           const key = pointer.shift();
-  //           if (!key) throw new Error("invalid pointer");
-
-  //           if (pointer.length === 0) {
-  //             return { ...current, [key]: text };
-  //           }
-
-  //           return {
-  //             ...current,
-  //             [key]: handleNested(current, pointer, text),
-  //           };
-  //         }
-
-  //         return handleNested(copy, pointer.slice(), text);
-  //       });
-  //     },
-  //     [setFiles],
-  //   );
-
-  const stats = {
-    download_count: data.downloads,
-    created_at: data.createdAt,
-    updated_at: data.updatedAt,
-  };
-
   return (
-    <main className="bg-body flex min-h-[93vh] flex-col items-center">
+    <main className="flex min-h-[93vh] flex-col items-center bg-body">
       <section className="my-10 w-3/4">
         <h2 className="text-3xl font-bold">{packageName}</h2>
         <Separator className="my-4 bg-sky" />
         <div className="flex flex-row justify-between">
-          <Stats {...stats} />
+          <Stats {...data} />
           <CopyPackage package_name={packageName} />
         </div>
       </section>

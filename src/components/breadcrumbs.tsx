@@ -1,16 +1,19 @@
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { type ReactNode } from "react";
 
 export const Breadcrumbs = ({
   base,
   path,
+  baseIcon = "/",
 }: {
   base: string;
   path: string[];
+  baseIcon?: ReactNode;
 }) => (
   <ul className="flex flex-row text-sm">
     <li>
-      <Link href={base}>/</Link>
+      <Link href={base}>{baseIcon}</Link>
     </li>
     {path.map((e, i, arr) => {
       if (i === arr.length - 1)

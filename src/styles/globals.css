@@ -83,10 +83,8 @@
   @apply inline-block h-[1em] overflow-y-hidden;
 }
 .counterDigit:before {
-  position: relative;
+  @apply relative whitespace-pre text-center;
   content: "0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9\A";
-  white-space: pre;
   top: calc(var(--value) * -1em);
-  text-align: center;
   transition: top 1s cubic-bezier(1, 0, 0, 1);
 }

@@ -37,7 +37,7 @@ export default async function Home() {
             seamlessly between computers
           </div>
           <span>
-            <h4 className="inline font-title text-lime-500">Collaborate </h4>{" "}
+            <h4 className="inline font-title text-lime-500">Collaborate </h4>
             with others
           </span>
           <span>
