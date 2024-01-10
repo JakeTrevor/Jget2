@@ -32,6 +32,9 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
+export const dynamic = "force-dynamic";
+// TODO see if we can get rid of this ^
+
 export default function RootLayout({
   children,
 }: {
