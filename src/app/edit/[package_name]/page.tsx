@@ -11,7 +11,7 @@ export default async function EditPage({
 
   return (
     <main>
-      <Display files={data.files} />
+      <Display packageName={packageName} files={data.files} />
     </main>
   );
 }

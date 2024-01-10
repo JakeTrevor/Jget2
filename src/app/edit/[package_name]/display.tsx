@@ -10,20 +10,27 @@ import { type Directory } from "~/types";
 import { Editor } from "./editor";
 import { Header } from "./header";
 import { Sidebar } from "./sidebar";
+import { EditorProvider } from "./editorContext";
 
-export const Display = ({ files }: { files: Directory }) => {
+export const Display = ({
+  files,
+  packageName,
+}: {
+  files: Directory;
+  packageName: string;
+}) => {
   return (
-    <>
-      <Header />
+    <EditorProvider initialFiles={files}>
+      <Header packageName={packageName} />
       <ResizablePanelGroup direction="horizontal">
         <ResizablePanel defaultSize={10}>
-          <Sidebar files={files} />
+          <Sidebar />
         </ResizablePanel>
         <ResizableHandle />
         <ResizablePanel defaultSize={90}>
           <Editor />
         </ResizablePanel>
       </ResizablePanelGroup>
-    </>
+    </EditorProvider>
   );
 };

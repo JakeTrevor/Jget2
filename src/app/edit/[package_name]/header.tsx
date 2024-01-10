@@ -1,24 +1,33 @@
 import Link from "next/link";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarTrigger,
+} from "~/components/ui/menubar";
 import { ThemeToggleSubmenu } from "~/components/ui/theme";
+import { SaveButton } from "./SaveButton";
 
-export function Header() {
+export function Header({ packageName }: { packageName: string }) {
   return (
-    <header className="width-full h-[5vh] bg-accent text-foreground">
-      <DropdownMenu>
-        <DropdownMenuTrigger>JGET</DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <ThemeToggleSubmenu />
-          <DropdownMenuItem asChild className="cursor-pointer">
-            <Link href="/">Home</Link>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+    <header className="h-[5vh] w-full bg-red-100 text-foreground">
+      <Menubar className="rounded-none">
+        <MenubarMenu>
+          <MenubarTrigger className="h-12 font-title text-xl">
+            JGET
+          </MenubarTrigger>
+          <MenubarContent>
+            <MenubarItem>
+              <Link href="/">Home</Link>
+            </MenubarItem>
+            <ThemeToggleSubmenu />
+            <MenubarItem>
+              <SaveButton packageName={packageName} />
+            </MenubarItem>
+          </MenubarContent>
+        </MenubarMenu>
+      </Menubar>
     </header>
   );
 }
