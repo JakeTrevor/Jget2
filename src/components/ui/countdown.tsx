@@ -1,12 +1,12 @@
 export const Countdown = ({
-  minDigits,
+  minDigits = 2,
   count,
 }: {
   minDigits?: number;
   count: number;
 }) => {
   const formatter = new Intl.NumberFormat("en-en", {
-    minimumIntegerDigits: minDigits ?? 2,
+    minimumIntegerDigits: minDigits,
     useGrouping: false,
   });
 
@@ -14,10 +14,13 @@ export const Countdown = ({
 
   return (
     <span className="inline-flex flex-row-reverse font-title text-5xl leading-[1em]">
-      {[...digits].reverse().map((e) => (
-        // @ts-expect-error This is always fine but it causes a type error
-        <span className="counterDigit" style={{ "--value": e }} />
-      ))}
+      {digits
+        .split("")
+        .reverse()
+        .map((e) => (
+          // @ts-expect-error This is always fine but it causes a type error
+          <span className="counterDigit" style={{ "--value": e }} />
+        ))}
     </span>
   );
 };

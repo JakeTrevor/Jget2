@@ -14,6 +14,7 @@ export const CopyButton = ({ text }: { text: string }) => {
       open={recent || undefined}
     >
       <Button
+        disabled={recent}
         variant="outline"
         size="icon"
         className={`transition-transform active:-translate-y-2 `}

@@ -1,22 +1,10 @@
 import { Breadcrumbs } from "~/components/breadcrumbs";
+import { getContent } from "~/lib/getContent";
+import { type Directory } from "~/types";
 
 import { BackButton } from "./BackButton";
 import { FileDisplay } from "./FileDisplay";
 import { FileList } from "./FileList";
-import { type Directory } from "~/types";
-
-function getDir(data: Directory, pointer: string[]) {
-  return pointer.reduce(
-    (acc: Directory | string, val: string): Directory | string => {
-      if (typeof acc === "string") return acc;
-      const result = acc[val];
-      if (!result) throw Error("lookup failed;");
-
-      return result;
-    },
-    data,
-  );
-}
 
 export const FileBrowser = ({
   package_name,
@@ -27,7 +15,7 @@ export const FileBrowser = ({
   pointer: string[];
   package_name: string;
 }) => {
-  const result = getDir(files, pointer);
+  const result = getContent(files, pointer);
 
   return (
     <section className="mb-20 min-h-[50vh] w-3/4 overflow-hidden rounded-md bg-background text-foreground shadow-xl">
