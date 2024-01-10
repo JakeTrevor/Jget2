@@ -1,10 +1,8 @@
 "use client";
-import { langs } from "@uiw/codemirror-extensions-langs";
-import ReactCodeMirror from "@uiw/react-codemirror";
-import { EditorView } from "codemirror";
+import dynamic from "next/dynamic";
 import Markdown from "react-markdown";
 
-import { jgetDark } from "~/components/codemirrorTheme";
+const CodeEditor = dynamic(() => import("~/components/code-mirror/editor"));
 
 export const FileDisplay = ({
   data,
@@ -35,12 +33,10 @@ export const FileDisplay = ({
             code: ({ children, className }) => {
               const match = /language-(\w+)/.exec(className ?? "");
               return match ? (
-                <ReactCodeMirror
-                  readOnly={true}
+                <CodeEditor
                   value={String(children)}
-                  theme={jgetDark}
-                  extensions={[EditorView.lineWrapping, langs.lua()]}
                   className="my-2"
+                  readOnly
                 />
               ) : (
                 <code className="bg-accent p-0.5 font-code text-accent-foreground">
@@ -55,14 +51,7 @@ export const FileDisplay = ({
       </div>
     );
 
-  return (
-    <ReactCodeMirror
-      readOnly={true}
-      value={data}
-      theme={jgetDark}
-      extensions={[EditorView.lineWrapping, langs.lua()]}
-    />
-  );
+  return <CodeEditor readOnly className="my-2" value={data} />;
 };
 
 function getExtension(file_name: string) {

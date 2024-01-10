@@ -1,7 +1,7 @@
 import { tags as t } from "@lezer/highlight";
 import { createTheme } from "@uiw/codemirror-themes";
 
-export const jgetDark = createTheme({
+export const jgetTheme = createTheme({
   theme: "light",
   settings: {
     background: "var(--background)",
