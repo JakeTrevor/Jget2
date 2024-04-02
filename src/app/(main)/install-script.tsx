@@ -6,10 +6,10 @@ export const InstallScript = () => {
       <p className="pr-2">
         ${" "}
         <span className="text-foreground">
-          wget https://jget.trevor.business/install
+          wget http://jget.trevor.business/jget.lua
         </span>
       </p>
-      <CopyButton text="wget https://jget.trevor.business/install" />
+      <CopyButton text="wget http://jget.trevor.business/jget.lua" />
     </span>
   );
 };
