@@ -2,6 +2,7 @@ import { type Metadata } from "next";
 import { api } from "~/trpc/server";
 import { PackageCount } from "./pkgCount";
 import { InstallScript } from "./install-script";
+import { Footer } from "./footer";
 
 export const metadata: Metadata = {
   title: "JGET",
@@ -58,6 +59,8 @@ export default async function Home() {
           </span>
         </div>
       </section>
+
+      <Footer />
     </main>
   );
 }
