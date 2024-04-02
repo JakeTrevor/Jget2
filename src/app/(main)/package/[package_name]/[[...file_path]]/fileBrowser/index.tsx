@@ -1,4 +1,4 @@
-import { Breadcrumbs } from "~/components/breadcrumbs";
+import { Breadcrumbs } from "~/app/(main)/package/[package_name]/[[...file_path]]/fileBrowser/breadcrumbs";
 import { getContent } from "~/lib/getContent";
 import { type Directory } from "~/types";
 
