@@ -37,21 +37,23 @@ export const FilterControls = ({ query: Q }: { query: exploreQuery }) => {
       <RadioGroup value={query.sorting} defaultValue="comfortable">
         <Link
           href={newURL(Q, { sorting: "name" })}
-          className="flex items-center justify-between space-x-2 px-3"
+          className="flex items-center justify-between space-x-2 rounded-sm px-3 py-1 hover:bg-accent"
         >
-          <Label htmlFor="r1">Alphabetical</Label>
+          <Label htmlFor="r1" className="cursor-pointer">
+            Alphabetical
+          </Label>
           <RadioGroupItem value="name" id="r1" />
         </Link>
         <Link
           href={newURL(Q, { sorting: "downloads" })}
-          className="flex items-center justify-between space-x-2 px-3"
+          className="flex items-center justify-between space-x-2 rounded-sm px-3 py-1 hover:bg-accent"
         >
           <Label htmlFor="r2">Downloads</Label>
           <RadioGroupItem value="downloads" id="r2" />
         </Link>
         <Link
           href={newURL(Q, { sorting: "updatedAt" })}
-          className="flex items-center justify-between space-x-2 px-3"
+          className="flex items-center justify-between space-x-2 rounded-sm px-3 py-1 hover:bg-accent"
         >
           <Label htmlFor="r3">Recent</Label>
           <RadioGroupItem value="updatedAt" id="r3" />
