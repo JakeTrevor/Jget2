@@ -1,6 +1,7 @@
 import { type Metadata } from "next";
 import { api } from "~/trpc/server";
 import { PackageCount } from "./pkgCount";
+import { InstallScript } from "./install-script";
 
 export const metadata: Metadata = {
   title: "JGET",
@@ -25,6 +26,11 @@ export default async function Home() {
             </p>
           </div>
         </div>
+      </section>
+
+      <section className="my-10  grid w-3/5 place-items-center self-center rounded-lg bg-body p-10 text-xl shadow-lg">
+        <h3 className="text-center text-2xl">Install with just one command:</h3>
+        <InstallScript />
       </section>
 
       <section className="my-10 w-3/4 self-center text-xl">
