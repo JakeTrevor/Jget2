@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+.divider {
+  @apply flex flex-row items-center gap-4 self-stretch whitespace-nowrap;
+  &:before,
+  &:after {
+    @apply h-0.5 w-full flex-grow bg-foreground/10 content-[''];
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

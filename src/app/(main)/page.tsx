@@ -12,8 +12,8 @@ export default async function Home() {
 
   return (
     <main className="flex flex-col">
-      <section className="bg-body grid min-h-[93vh] place-items-center">
-        <div className="flex flex-col items-center gap-2 rounded-lg bg-background/20 p-5 shadow-lg lg:flex-row-reverse dark:bg-background/70">
+      <section className="grid min-h-[93vh] place-items-center bg-body">
+        <div className="flex flex-col items-center gap-2 rounded-lg bg-background/20 p-5 shadow-lg dark:bg-background/70 lg:flex-row-reverse">
           <PackageCount count={pkg_count} />
           <div>
             <h1 className="text-4xl font-bold">
@@ -28,7 +28,7 @@ export default async function Home() {
       </section>
 
       <section className="my-10 w-3/4 self-center text-xl">
-        <h3 className="mb-8 text-3xl font-bold">Why use JGET?</h3>
+        <h3 className="divider mb-8 text-3xl font-bold">Why use JGET?</h3>
         <div className="grid grid-cols-1 gap-x-1 gap-y-3 lg:grid-cols-2">
           <div className="inline">
             <h4 className="text-sky-500 inline font-title lg:text-lime-500">
