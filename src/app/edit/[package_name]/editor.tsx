@@ -17,7 +17,9 @@ export function Editor() {
           onChange={(e) => update(e, openFile)}
         />
       ) : (
-        <div>no file open</div>
+        <div className="grid h-[95dvh] place-items-center bg-accent/20">
+          <p>No File Selected</p>
+        </div>
       )}
     </div>
   );
