@@ -1,27 +1,120 @@
+local ensure_width = require "cc.strings".ensure_width
+
 do --settings block
-    settings.define("JGET.outdir", { description = "Directory packages are installed into", default = "./packages/" })
+    settings.define("JGET.outdir",
+        { description = "Directory packages are installed into", default = "./packages/", type = "string" })
     settings.define("JGET.endpoint",
         {
             description = "Location of JGET webserver. Uses master server as default",
-            default = "https://jget.trevor.business/api/package/"
+            default = "http://localhost:3000/api/package/",
+            type = "string"
         })
 end
 
 local endpoint = settings.get("JGET.endpoint")
 local outdir = shell.resolve(settings.get("JGET.outdir"))
+local w, _h = term.getSize()
 
-function Set(list)
-    local set = {}
-    for _, l in ipairs(list) do set[l] = true end
-    return set
+---@param e string
+local function printError(e)
+    term.setTextColor(colors.red)
+    print(e)
+    term.setTextColor(colors.white)
 end
 
+---@param s string
+local function printSuccess(s)
+    term.setTextColor(colors.green)
+    print(s)
+    term.setTextColor(colors.white)
+end
+
+---@param s string
+local function printGray(s)
+    term.setTextColor(colors.gray)
+    write(s)
+    term.setTextColor(colors.white)
+end
+
+---@param dirname string
 local function ensure(dirname)
     if not fs.exists(dirname) then
         fs.makeDir(dirname)
     end
 end
 
+local function send_request(args)
+    http.request(args)
+
+    local requesting = true
+
+    local response, reason, failResponse
+
+    while requesting do
+        local event, sourceText
+        event, _, sourceText, failResponse = os.pullEvent()
+
+        if event == "http_success" then
+            ---@type Response
+            response = sourceText
+            requesting = false
+        elseif event == "http_failure" then
+            reason = sourceText
+            requesting = false
+        end
+    end
+
+    if not response then
+        if not failResponse then
+            return false, reason
+        end
+
+
+        ---@diagnostic disable-next-line: param-type-mismatch
+        local data = textutils.unserialiseJSON(failResponse.readAll())
+
+        if (data) then
+            return false, data.message
+        end
+
+        return false, "unspecified error"
+    end
+
+
+    if response.getResponseCode() ~= 200 then
+        return false, "HTTP code " .. response.getResponseCode()
+    end
+
+    ---@diagnostic disable-next-line: param-type-mismatch
+    local data = textutils.unserialiseJSON(response.readAll())
+
+    if not data then
+        return false, "request did not provide data"
+    end
+
+    return true, data
+end
+
+local function get_installed_packages()
+    if (not fs.exists(outdir)) then return {} end
+    return fs.list(outdir)
+end
+
+local function list()
+    local pkgs = get_installed_packages()
+    if (#pkgs == 0) then
+        printError("no packages installed")
+        return
+    end
+
+    printSuccess("installed packages:")
+    for _, v in ipairs(pkgs) do
+        print("- " .. v)
+    end
+end
+
+
+---@param dirname string
 local function install(dirname, files)
     ensure(dirname)
     for fname, value in pairs(files) do
@@ -29,8 +122,12 @@ local function install(dirname, files)
         if type(value) == "string" then
             --its a file
             local file = fs.open(file_path, "w")
-            file.write(value)
-            file.close()
+            if (file) then
+                file.write(value)
+                file.close()
+            else
+                error("Failed to write file")
+            end
         else
             --its a directory
             install(file_path, value)
@@ -38,66 +135,26 @@ local function install(dirname, files)
     end
 end
 
-local function get_installed_packages()
-    return fs.list(outdir)
-end
-
-local function list()
-    if (not fs.exists(outdir)) then
-        print("no packages installed")
-        return
-    end
-
-    local pkgs = get_installed_packages()
-
-    if (#pkgs == 0) then
-        print("no packages installed")
-        return
-    end
-
-    print("installed packages:")
-    print(textutils.serialise(pkgs))
-end
-
-local function handle_http_errors(response, reason, failRes)
-    if not response then
-        if not failRes then
-            print("error: " .. reason)
-            return nil
-        end
-
-        local data = textutils.unserialiseJSON(failRes.readAll())
-
-        print("error: " .. data.message)
-        return nil
-    end
-
-
-    if response.getResponseCode() ~= 200 then
-        print("error: code " .. response.getResponseCode())
-        return nil
-    end
-
-    local data = textutils.unserialiseJSON(response.readAll())
-
-    if not data then
-        print("error - request did not provide data")
-    end
-
-    return data
-end
-
+---@param pkg_name string
 local function fetch_pkg(pkg_name)
-    print("getting package " .. pkg_name)
+    printGray("getting package ")
+
+    local targetSize = w - #"getting package " - #"Success!"
+    write(ensure_width(pkg_name, targetSize))
 
 
     local target_url = endpoint .. pkg_name
 
-    local data = handle_http_errors(http.get {
+    local success, data = send_request({
         url = target_url, method = "GET",
     })
 
-    if not data then return false end
+    if not success then
+        printError(" Failed!")
+        ---@diagnostic disable-next-line: param-type-mismatch
+        printError(data)
+        return false
+    end
 
     local files = textutils.unserialiseJSON(data["files"])
 
@@ -106,27 +163,46 @@ local function fetch_pkg(pkg_name)
     local install_dir = fs.combine(outdir, pkg_name)
     install(install_dir, files)
 
-    local dependencies = data["dependencies"]
-    for _, dep in ipairs(dependencies) do
-        fetch_pkg(dep)
-    end
+    printSuccess("Success!")
 
-    return true
+    ---@type string[]
+    local dependencies = data["dependencies"]
+    return true, dependencies
 end
 
 local function get(arg)
     local package = arg[2]
 
     if package == nil then
-        print("Please provide a package to install")
+        printError("Please provide a package to install")
         return
     end
 
-    if fetch_pkg(package) then
-        print("success!")
+    local packages = {}
+    local head, tail = 1, 0
+
+    local downloaded_pkgs = {}
+
+    while package do
+        if not (downloaded_pkgs[package]) then
+            local success, deps = fetch_pkg(package)
+
+            if (success) then
+                if deps then
+                    for _, v in ipairs(deps) do
+                        packages[head] = v
+                        head = head + 1
+                    end
+                end
+                downloaded_pkgs[package] = true
+            end
+        end
+        tail = tail + 1
+        package = packages[tail]
     end
 end
 
+-- TODO deprecate this?
 local function init(args)
     local package_name = args[2]
 
@@ -146,15 +222,21 @@ end
 local function get_files(path)
     local data = {}
     local file_names = fs.list(path)
+
     for _, file_name in ipairs(file_names) do
         if not (file_name == "packages") then
             local file_path = fs.combine(path, file_name)
+
             if fs.isDir(file_path) then
                 data[file_name] = get_files(file_path)
             else
                 local file = fs.open(file_path, "r")
-                data[file_name] = file.readAll()
-                file.close()
+                if (file) then
+                    data[file_name] = file.readAll()
+                    file.close()
+                else
+                    printError("failed to read file")
+                end
             end
         end
     end
@@ -166,14 +248,20 @@ local function get_dependencies(path)
     local dep_arr = {}
     local head = 1
 
-    if (not fs.exists(dep_file)) then return textutils.empty_json_array end
+    if (not fs.exists(dep_file)) then
+        return textutils.empty_json_array
+    end
 
-    local handle = fs.open(dep_file, "r")
-    local next_line = handle.readLine();
-    while (next_line) do
-        dep_arr[head] = next_line
-        head = head + 1;
-        next_line = handle.readLine()
+    local file = fs.open(dep_file, "r")
+    if file then
+        local next_line = file.readLine();
+        while (next_line) do
+            dep_arr[head] = next_line
+            head = head + 1;
+            next_line = file.readLine()
+        end
+    else
+        printError("failed to read dependencies")
     end
 
     return dep_arr or textutils.empty_json_array
@@ -183,93 +271,147 @@ local function put(args)
     local package_name = args[2]
 
     if not package_name then
-        write("Please provide a package")
+        printError("Please provide a package")
         return
     end
 
-    local package_dir = "packages/" .. package_name
+    local package_dir = shell.resolve(outdir .. '/' .. package_name)
 
-    if not fs.exists(shell.resolve(package_dir)) then
-        print("The directory `" .. package_dir .. "` does not exist")
-        print("If your package is written somewhere else, please move it there")
+    if not fs.exists(package_dir) then
+        printError("The directory `" .. package_dir .. "` does not exist")
+        printError("If your package is written somewhere else, please move it there")
         return
     end
 
     local data = {}
-    local current_directory = shell.resolve("./packages/" .. package_name)
-
-    local files = get_files(current_directory)
+    local files = get_files(package_dir)
 
     data["files"] = textutils.serialiseJSON(files)
-    data["dependencies"] = get_dependencies(current_directory)
+    data["dependencies"] = get_dependencies(package_dir)
 
     local json_data = textutils.serialiseJSON(data)
 
     local target_url = endpoint .. package_name
 
-    print("uploading package " .. package_name)
+    printGray("Putting package ")
+    local targetSize = w - #"Putting package " - #"Success!"
+    write(ensure_width(package_name, targetSize))
 
-    local args = {
+
+    local success, err = send_request({
         url = target_url,
         body = json_data,
         method = "PUT",
         headers = { ["Content-Type"] = "application/json" }
-    }
+    })
 
-    handle_http_errors(http.post(args))
+    if (success) then
+        printSuccess("Success!")
+    else
+        printError(" Failed!")
+        ---@diagnostic disable-next-line: param-type-mismatch
+        printError(err)
+    end
+end
 
-    print("success!")
+local function usage()
+    print()
+    term.setTextColor(colors.gray)
+    print("Usage:")
+    term.setTextColor(colors.white)
+end
+
+---@param text string
+local function bulletPoint(text)
+    term.setTextColor(colors.gray)
+    write("- ")
+    term.setTextColor(colors.white)
+    print(text)
 end
 
 local help_dict = {
-    ["list"] = [[
-list
-- lists all packages installed in the current directory
+    list = function()
+        usage()
+        printSuccess("  jget list")
+        print()
+        bulletPoint("Lists all installed packages")
+    end,
+    get = function()
+        usage()
+        term.setTextColor(colors.green)
+        write("  jget get ")
+        term.setTextColor(colors.blue)
+        print("<package name>")
+        term.setTextColor(colors.white)
 
-useage:
-'jget list'
-]],
-    ["get"] = [[
-get
-- requests the specified package from the JGET repo
-- installed the package in the outdir (by default "./packages/")
+        print()
+        bulletPoint("Requests the specified package from the JGET repo")
+        bulletPoint("Installed the package in the outdir")
+        bulletPoint("By default './packages/'")
+    end,
+    put = function()
+        usage()
+        term.setTextColor(colors.green)
+        write("  jget put ")
+        term.setTextColor(colors.blue)
+        print("<package name>")
+        term.setTextColor(colors.white)
+        print()
 
-useage:
-'jget get <package name>'
-]],
-    ["put"] = [[
-put
-- specify a package to to be uploaded
-- looks for the package files in `<outdir>/<package name>/`
-    - i.e. `packages/<package name>/`
+        bulletPoint("Upload (or update) a package on JGET")
+        term.setTextColor(colors.gray)
+        write("- ")
+        term.setTextColor(colors.white)
+        write("Looks for the package files in '")
+        term.setTextColor(colors.blue)
+        write("<outdir>")
+        term.setTextColor(colors.white)
+        write("/")
+        term.setTextColor(colors.blue)
+        write("<package name>")
+        term.setTextColor(colors.white)
+        print("/`")
 
-- Package is uploaded to JGET repo
 
-- This is an "upsert" operation;
-- if the package already exists on the repo then the package will be updated
+        term.setTextColor(colors.gray)
+        write("- ")
+        term.setTextColor(colors.white)
+        write("i.e. '")
+        term.setTextColor(colors.blue)
+        write(outdir)
+        term.setTextColor(colors.white)
+        write("/")
+        term.setTextColor(colors.blue)
+        write("<package name>")
+        term.setTextColor(colors.white)
+        print("/`")
+    end,
+    init = function()
+        usage()
+        printSuccess("  jget init")
 
-    useage:
-'jget put <package name>'
-]],
-    ["init"] = [[
-init
-- creates a directory in the `/packages/` folder
-- the directory name is a
+        bulletPoint("creates a directory in the `/packages/` folder")
+    end
+    ,
+    help = function()
+        usage()
+        term.setTextColor(colors.green)
+        write("  jget help ")
+        term.setTextColor(colors.blue)
+        print("<command>")
+        term.setTextColor(colors.white)
+        print()
 
-    useage:
-'jget init <package name>'
-]],
-    ["help"] = [[
-help
-- you are already using this command!
-- given a command, will print availible help information for that command
 
-- if you're looking for more information about using JGET, checkout the documentation:
-https://jget.trevor.business/get_jget/
-
-useage:
-'jget help <command>'
-]],
+        bulletPoint("Print help for a command")
+        bulletPoint("For a list of availible commands type")
+        print()
+        printSuccess("  jget")
+        print()
+        bulletPoint("If you're looking for more information about using JGET, checkout the documentation:")
+        print()
+        printSuccess("  https://jget.trevor.business/docs/")
+    end,
 }
 
 ---@param arg string[]
@@ -277,22 +419,24 @@ local function jget_help(arg)
     local command = arg[2]
 
     if not command then
-        print()
-        print("You need to enter the command you want help on. Use 'jget' for list of commands")
-        print()
-        print("or type 'jget help help' for information on how to use this command")
+        help_dict.help()
         print()
         return
     end
 
     if help_dict[command] then
+        help_dict[command]()
         print()
-        print(help_dict[command])
     else
         print()
-        print("Command not recognised. Use 'jget' for list of commands")
+        term.setTextColor(colors.red)
+        write("    Command ")
+        term.setTextColor(colors.white)
+        write("'" .. command .. "'")
+        term.setTextColor(colors.red)
+        print(" not recognised.")
+
         print()
-        print("or type 'jget help help' for information on how to use this command")
         print()
     end
 end
@@ -309,12 +453,16 @@ local commands = {
 local function main(args)
     local command = arg[1]
     if not command then
-        print("")
-        print("please enter a command")
-        print("one of:")
-        print("----")
+        usage()
+        term.setTextColor(colors.green)
+        write("  jget ")
+        term.setTextColor(colors.blue)
+        print("<command> [args]")
+        term.setTextColor(colors.white)
+        print()
+        print("Commands:")
         for name, _ in pairs(commands) do
-            print(name)
+            bulletPoint(name)
         end
         print()
         return
@@ -323,7 +471,13 @@ local function main(args)
     if commands[command] then
         commands[command](args)
     else
-        print("unrecognised command: " .. command)
+        print()
+        term.setTextColor(colors.red)
+        write("unrecognised command: ")
+
+        term.setTextColor(colors.white)
+        print("'" .. command .. "'")
+        print()
     end
 end
 
