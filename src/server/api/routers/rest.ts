@@ -23,7 +23,7 @@ export const restRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input: { name } }) => {
-      const record = await ctx.prisma.package.findUnique({
+      const record = await ctx.db.package.findUnique({
         where: {
           name: name,
         },
@@ -31,7 +31,7 @@ export const restRouter = createTRPCRouter({
 
       if (!record) throw new Error("No such package");
 
-      const pkg = await ctx.prisma.package.update({
+      const pkg = await ctx.db.package.update({
         where: {
           name: name,
         },
@@ -82,7 +82,7 @@ export const restRouter = createTRPCRouter({
 
       const dependencies = await Promise.all(
         dependency_names.map(async (dep_name) => {
-          const dep = await ctx.prisma.package.findUnique({
+          const dep = await ctx.db.package.findUnique({
             where: { name: dep_name },
           });
           if (!dep) throw new Error(`Dependency not found: ${dep_name}`);
@@ -90,7 +90,7 @@ export const restRouter = createTRPCRouter({
         }),
       );
 
-      const package_obj = await ctx.prisma.package.upsert({
+      const package_obj = await ctx.db.package.upsert({
         where: {
           name: input.name,
         },
@@ -100,7 +100,7 @@ export const restRouter = createTRPCRouter({
 
       if (!dependencies) return package_obj;
 
-      await ctx.prisma.dependency.createMany({
+      await ctx.db.dependency.createMany({
         data: dependencies.map((dep) => {
           return { forID: package_obj.ID, depID: dep.ID };
         }),
