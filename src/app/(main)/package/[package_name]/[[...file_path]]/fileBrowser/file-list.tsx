@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Fragment } from "react";
 
 import { type Directory } from "~/types";
-import { FileIcon } from "~/components/Icon";
+import { FileIcon } from "~/components/icon";
 import { directoryToList } from "~/lib/directoryToList";
 
 export const FileList = ({

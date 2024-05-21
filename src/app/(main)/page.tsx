@@ -1,6 +1,6 @@
 import { type Metadata } from "next";
 import { api } from "~/trpc/server";
-import { PackageCount } from "./pkgCount";
+import { PackageCount } from "./package-count";
 import { InstallScript } from "./install-script";
 import { Footer } from "./footer";
 
