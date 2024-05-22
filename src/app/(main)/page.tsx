@@ -22,7 +22,7 @@ export default async function Home() {
               A Package Manager for Computercraft
             </h1>
             <p>
-              <p className="inline text-xs text-foreground/50">by</p> Jake
+              <span className="inline text-xs text-foreground/50">by</span> Jake
               Trevor
             </p>
           </div>

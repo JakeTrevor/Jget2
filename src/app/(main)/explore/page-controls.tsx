@@ -22,6 +22,7 @@ export const PageControls = ({
   num_pages: number;
   query: exploreQuery;
 }) => {
+  max = max || 1;
   const page = query.page ?? 1;
 
   const { pageNumbers, pagesBefore, pagesAfter, isFirstPage, isLastPage } =
