@@ -138,6 +138,7 @@ end
 ---@param pkg string
 local function copy_bin(pkg)
     local bin_dir = "/packages/" .. pkg .. "/bin/"
+    if (not fs.exists(bin_dir) or not fs.isDir(bin_dir)) then return end
     local files = fs.list(bin_dir)
     for _, file in pairs(files) do
         if fs.exists(file) then
