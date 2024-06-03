@@ -135,6 +135,18 @@ local function install(dirname, files)
     end
 end
 
+---@param pkg string
+local function copy_bin(pkg)
+    local bin_dir = "/packages/" .. pkg .. "/bin/"
+    local files = fs.list(bin_dir)
+    for _, file in pairs(files) do
+        if fs.exists(file) then
+            fs.delete(file)
+        end
+        fs.copy(bin_dir .. file, file)
+    end
+end
+
 ---@param pkg_name string
 local function fetch_pkg(pkg_name)
     printGray("getting package ")
@@ -163,12 +175,25 @@ local function fetch_pkg(pkg_name)
     local install_dir = fs.combine(outdir, pkg_name)
     install(install_dir, files)
 
+    copy_bin(pkg_name)
+
     printSuccess("Success!")
 
     ---@type string[]
     local dependencies = data["dependencies"]
     return true, dependencies
 end
+
+
+local function find_setup(pkg)
+    local setup_path = "/packages/" .. pkg .. "/setup"
+    if (fs.exists(setup_path) and not fs.isDir(setup_path)) then return setup_path end
+
+    setup_path = setup_path .. ".lua"
+    if (fs.exists(setup_path) and not fs.isDir(setup_path)) then return setup_path end
+    return ""
+end
+
 
 local function get(arg)
     local package = arg[2]
@@ -200,7 +225,13 @@ local function get(arg)
         tail = tail + 1
         package = packages[tail]
     end
+
+    local setup_path = find_setup(arg[2])
+    if (setup_path) then
+        dofile(setup_path)
+    end
 end
+
 
 -- TODO deprecate this?
 local function init(args)
