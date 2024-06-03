@@ -189,9 +189,7 @@ end
 local function find_setup(pkg)
     local setup_path = "/packages/" .. pkg .. "/setup"
     if (fs.exists(setup_path) and not fs.isDir(setup_path)) then return setup_path end
-
-    setup_path = setup_path .. ".lua"
-    if (fs.exists(setup_path) and not fs.isDir(setup_path)) then return setup_path end
+    if (fs.exists(setup_path .. ".lua") and not fs.isDir(setup_path .. ".lua")) then return setup_path end
     return ""
 end
 
@@ -229,7 +227,7 @@ local function get(arg)
 
     local setup_path = find_setup(arg[2])
     if (setup_path) then
-        dofile(setup_path)
+        require(setup_path)
     end
 end
 
