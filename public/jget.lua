@@ -190,7 +190,7 @@ local function find_setup(pkg)
     local setup_path = "/packages/" .. pkg .. "/setup"
     if (fs.exists(setup_path) and not fs.isDir(setup_path)) then return setup_path end
     if (fs.exists(setup_path .. ".lua") and not fs.isDir(setup_path .. ".lua")) then return setup_path end
-    return ""
+    return nil
 end
 
 
