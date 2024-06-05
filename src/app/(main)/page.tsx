@@ -1,6 +1,6 @@
 import { type Metadata } from "next";
 import { api } from "~/trpc/server";
-import { PackageCount } from "./pkgCount";
+import { PackageCount } from "./package-count";
 import { InstallScript } from "./install-script";
 import { Footer } from "./footer";
 
@@ -22,7 +22,7 @@ export default async function Home() {
               A Package Manager for Computercraft
             </h1>
             <p>
-              <p className="inline text-xs text-foreground/50">by</p> Jake
+              <span className="inline text-xs text-foreground/50">by</span> Jake
               Trevor
             </p>
           </div>

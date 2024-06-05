@@ -1,9 +1,9 @@
 import { querySchema } from "~/lib/ExplorePageUrlMaker";
 import { api } from "~/trpc/server";
 
-import { FilterControls } from "./FilterControls";
-import { PackageListing } from "./PackageListing";
-import { PageControls } from "./PageControls";
+import { FilterControls } from "./filter-controls";
+import { PackageListing } from "./package-listing";
+import { PageControls } from "./page-controls";
 
 export default async function Home({
   searchParams,
@@ -15,7 +15,7 @@ export default async function Home({
   const { packages, num_pages } = await api.package.getList.query(query);
 
   return (
-    <main className="bg-body grid min-h-[93vh] w-full grid-cols-4 gap-4 p-10">
+    <main className="grid min-h-[93vh] w-full grid-cols-4 gap-4 bg-body p-10">
       <div className="row-span-2 pl-4 pr-12">
         <FilterControls query={query} />
       </div>

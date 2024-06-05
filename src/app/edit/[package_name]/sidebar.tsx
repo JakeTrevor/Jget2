@@ -1,4 +1,4 @@
-import { Chevron, FileIcon } from "~/components/Icon";
+import { Chevron, FileIcon } from "~/components/icon";
 import { directoryToList } from "~/lib/directoryToList";
 import { useToggle } from "~/lib/useToggle";
 import { cn } from "~/lib/utils";

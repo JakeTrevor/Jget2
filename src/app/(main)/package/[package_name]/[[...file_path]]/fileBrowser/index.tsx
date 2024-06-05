@@ -2,9 +2,9 @@ import { Breadcrumbs } from "~/app/(main)/package/[package_name]/[[...file_path]
 import { getContent } from "~/lib/getContent";
 import { type Directory } from "~/types";
 
-import { BackButton } from "./BackButton";
-import { FileDisplay } from "./FileDisplay";
-import { FileList } from "./FileList";
+import { BackButton } from "./back-button";
+import { FileDisplay } from "./file-display";
+import { FileList } from "./file-list";
 
 export const FileBrowser = ({
   package_name,

@@ -2,7 +2,7 @@ import type { Metadata, ResolvingMetadata } from "next";
 
 import { Separator } from "~/components/ui/separator";
 import { api } from "~/trpc/server";
-import { Stats } from "./Stats";
+import { Stats } from "./stats";
 import { CopyPackage } from "./copy-package";
 import { EditButton } from "./edit-button";
 import FileBrowser from "./fileBrowser";

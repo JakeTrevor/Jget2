@@ -5,10 +5,10 @@ import localFont from "next/font/local";
 import { cookies } from "next/headers";
 import { Toaster } from "react-hot-toast";
 
-import { TRPCReactProvider } from "~/trpc/react";
-
 import { ThemeProvider } from "~/components/ui/theme";
 import { cn } from "~/lib/utils";
+import { TRPCReactProvider } from "~/trpc/react";
+import SessionProvider from "~/components/session-provider";
 
 const title = localFont({
   src: "../fonts/title.ttf",
@@ -50,17 +50,19 @@ export default function RootLayout({
           scp.variable,
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <TRPCReactProvider cookies={cookies().toString()}>
-            <Toaster />
-            {children}
-          </TRPCReactProvider>
-        </ThemeProvider>
+        <SessionProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <TRPCReactProvider cookies={cookies().toString()}>
+              <Toaster />
+              {children}
+            </TRPCReactProvider>
+          </ThemeProvider>
+        </SessionProvider>
       </body>
     </html>
   );
