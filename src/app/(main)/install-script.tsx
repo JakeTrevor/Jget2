@@ -9,7 +9,7 @@ export const InstallScript = () => {
           wget https://jget.jjbt.dev/jget.lua
         </span>
       </p>
-      <CopyButton text="wget https://jget.trevor.business/jget.lua" />
+      <CopyButton text="wget https://jget.jjbt.dev/jget.lua" />
     </span>
   );
 };
