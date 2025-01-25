@@ -6,7 +6,7 @@ export const InstallScript = () => {
       <p className="pr-2">
         ${" "}
         <span className="text-foreground">
-          wget https://jget.trevor.business/jget.lua
+          wget https://jget.jjbt.dev/jget.lua
         </span>
       </p>
       <CopyButton text="wget https://jget.trevor.business/jget.lua" />

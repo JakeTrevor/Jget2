@@ -6,7 +6,7 @@ do --settings block
     settings.define("JGET.endpoint",
         {
             description = "Location of JGET webserver. Uses master server as default",
-            default = "https://jget.trevor.business/api/package/",
+            default = "https://jget.jjbt.dev/api/package/",
             type = "string"
         })
 end
