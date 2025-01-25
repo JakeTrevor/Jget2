@@ -1,4 +1,4 @@
-import { CopyButton } from "~/components/CopyButton";
+import { CopyButton } from "~/components/copy-button";
 
 export const CopyPackage = ({ package_name }: { package_name: string }) => {
   return (

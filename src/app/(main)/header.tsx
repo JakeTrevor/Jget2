@@ -1,5 +1,5 @@
 import Link from "next/link";
-import SearchBar from "~/components/SearchBar";
+import SearchBar from "~/components/search-bar";
 import { Button } from "~/components/ui/button";
 import { ThemeToggle } from "~/components/ui/theme";
 
